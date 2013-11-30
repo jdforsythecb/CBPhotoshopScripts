@@ -26,7 +26,7 @@ copyTextToClipboard = function(text) {
         clipTxtFile.close();
         
         // use clip.exe to copy the contents of the text file to the Windows clipboard
-        var clipBatFile = new File(folderForTempFiles + "/clipboard.bat")
+        var clipBatFile = new File(folderForTempFile + "/clipboard.bat")
         if (clipBatFile.exists) clipBatFile.remove();
         clipBatFile.open('w');
         clipBatFile.writeln("cat \"" + clipTxtFile.fsName + "\" | clip");

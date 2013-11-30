@@ -20,6 +20,15 @@ folderNumberStringUtils = function(input) {
     // this allows you to keep track of the company instead of reusing the "is" methods repeatedly
     // so you can if/ifelse/else or switch on instance.currentCompany against instance.CompanyTypes
     this.currentCompany = "";
+    
+    // sanitized folder number
+    this.folder = "";
+    
+    // booleans
+    this.isMM = false;
+    this.isCB = false;
+    this.isMCD = false;
+    this.isUN = false;
 
     // create an enum-like object
     this.CompanyTypes = {
@@ -64,11 +73,22 @@ folderNumberStringUtils = function(input) {
     }
 
     this.setCurrentCompany = function() {
-        if      (this.isChurchBudget()) this.currentCompany = this.CompanyTypes.CHURCHBUDGET;
-        else if (this.isMcDaniel())     this.currentCompany = this.CompanyTypes.MCDANIEL;
-        else if (this.isUnited())       this.currentCompany = this.CompanyTypes.UNITED;
-        else if (this.isMonthlyMail())  this.currentCompany = this.CompanyTypes.MONTHLYMAIL;
-        
+        if (this.isChurchBudget()) {
+            this.currentCompany = this.CompanyTypes.CHURCHBUDGET;
+            this.isCB = true;
+        }
+        else if (this.isMcDaniel()) {
+            this.currentCompany = this.CompanyTypes.MCDANIEL;
+            this.isMCD = true;
+        }
+        else if (this.isUnited()) {
+            this.currentCompany = this.CompanyTypes.UNITED;
+            this.isUN = true;
+        }
+        else if (this.isMonthlyMail()) {
+            this.currentCompany = this.CompanyTypes.MONTHLYMAIL;
+            this.isMM = true;
+        }        
         else this.currentCompany = "";
     }
 
@@ -140,4 +160,15 @@ folderNumberStringUtils = function(input) {
         return input.replace ("-", "");
     }
 
+    // go ahead and do all the computation upon instantiation
+    this.setCurrentCompany();
+    result = this.decipherString();
+    if (result.status == 1) {
+        alert("folderNumberStringUtils: Failed to decipher string - " + result.message);
+    }
+    else {
+        this.folder = result.folder;
+    }
+
 }
+

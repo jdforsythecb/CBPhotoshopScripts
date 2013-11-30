@@ -1,8 +1,5 @@
 ﻿
-ChurchBudgetSwissKnife = function(fromProgram, jobSize, format) {
-    this.fromProgram = fromProgram;
-    this.jobSize = jobSize;
-    this.format = format;
+ChurchBudgetSwissKnife = function() {
 
     // private constants
     TEMPLATEBASEPATH = "/g/jdforsythe/Templates/Photoshop/";
@@ -25,65 +22,33 @@ ChurchBudgetSwissKnife = function(fromProgram, jobSize, format) {
 }
 
 
-///////////////////////////////////////////////////////////////////////////////////////
-// ENUMS //////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////
 
-// an enum-like object listing all programs
-ChurchBudgetSwissKnife.prototype.Programs = {
-    QUARK: 0,
-    PAGEMAKER: 1,
-    INDESIGN: 2,
-    PHOTOSHOP: 3,
-    PNGFONT: 4,
-    FONTTOOLS: 5
-};
-
-// an enum-like object listing the job sizes
-ChurchBudgetSwissKnife.prototype.JobSizes = {
-    DOLLAR: 0,
-    PREMIER: 1,
-    BOOKLET: 2,
-    CARTON: 3,
-    COVER: 4,
-    MAILBACK: 5,
-    NUM10: 6
-};
-
-// an enum-like object listing all formats a document could be in
-ChurchBudgetSwissKnife.prototype.Formats = {
-    QUARKCOLORTIFFPRINTER: 0,
-    QUARKBWTIFFPRINTER: 1,
-    PMPORTRAITCOLORTIFFPRINTER: 2,
-    PMPORTRAITBWTIFFPRINTER: 3,
-    PMLANDSCAPECOLORTIFFPRINTER: 4,
-    PMLANDSCAPEBWTIFFPRINTER: 5
-};
-    
 
 
 ///////////////////////////////////////////////////////////////////////////////////////
 // PUBLIC METHODS /////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////
+
+
+// resize image to a certain dpi (scale styles defaults to true)
+ChurchBudgetSwissKnife.prototype.resizeToDPI = function(dpi, scaleStyles) {
+    // default
+    if (typeof scaleStyles === 'undefined') scaleStyles = true;
     
-    
-// Image Size from TIFF Color ImagePrinterPro is 600dpi, resize to 300dpi
-ChurchBudgetSwissKnife.prototype.resizeTo300dpi() = function() {
     var actDesc = new ActionDescriptor();
-    actDesc.putUnitDouble(cTID('Rslt'), cTID('#Rsl'), 300);
+    actDesc.putUnitDouble(cTID('Rslt'), cTID('#Rsl'), dpi);
     actDesc.putBoolean(sTID("scaleStyles"), true);
     actDesc.putBoolean(cTID('CnsP'), true);
     actDesc.putEnumerated(cTID('Intr'), cTID('Intp'), cTID('Bcbc'));
     executeAction(sTID('imageSize'), actDesc, DialogModes.NO);
 };
 
-
 /////////////////////////////////////////////////////////////
 // WORKING WITH SELECTIONS //////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 // select all
-ChurchBudgetSwissKnife.prototype.selectAll() = function() {
+ChurchBudgetSwissKnife.prototype.selectAll = function() {
     var actDesc = new ActionDescriptor();
     var actRef = new ActionReference();
     actRef.putProperty(cTID('Chnl'), sTID("selection"));
@@ -93,7 +58,7 @@ ChurchBudgetSwissKnife.prototype.selectAll() = function() {
 };
 
 // select None
-ChurchBudgetSwissKnife.prototype.selectNone() = function() {
+ChurchBudgetSwissKnife.prototype.selectNone = function() {
     var actDesc = new ActionDescriptor();
     var actRef = new ActionReference();
     actRef.putProperty(cTID('Chnl'), sTID("selection"));
@@ -102,31 +67,30 @@ ChurchBudgetSwissKnife.prototype.selectNone() = function() {
     executeAction(cTID('setd'), actDesc, DialogModes.NO);
 };
 
-
-// Inverse selection
-ChurchBudgetSwissKnife.prototype.invertSelection() = function() {
-    executeAction(cTID('Invs'), undefined, DialogModes.NO);
-};
-
-// Delete selection
-ChurchBudgetSwissKnife.prototype.deleteSelection() = function() {
-    executeAction(cTID('Dlt '), undefined, DialogModes.NO);
-};
-
-
-// select the area containing the envelope on dollar proof
-ChurchBudgetSwissKnife.prototype.selectDollarProofBorder() = function() {
+// select rectangle
+ChurchBudgetSwissKnife.prototype.selectRect = function(top, right, bottom, left, unit) {
     var actDesc = new ActionDescriptor();
     var actRef = new ActionReference();
     actRef.putProperty(cTID('Chnl'), sTID("selection"));
     actDesc.putReference(cTID('null'), actRef);
     var actDesc2 = new ActionDescriptor();
-    actDesc2.putUnitDouble(cTID('Top '), cTID('#Rlt'), 263.28);
-    actDesc2.putUnitDouble(cTID('Left'), cTID('#Rlt'), 30.24);
-    actDesc2.putUnitDouble(cTID('Btom'), cTID('#Rlt'), 482.4);
-    actDesc2.putUnitDouble(cTID('Rght'), cTID('#Rlt'), 489.36);
+    actDesc2.putUnitDouble(cTID('Top '), cTID(unit), top);
+    actDesc2.putUnitDouble(cTID('Rght'), cTID(unit), right);
+    actDesc2.putUnitDouble(cTID('Btom'), cTID(unit), bottom);
+    actDesc2.putUnitDouble(cTID('Left'), cTID(unit), left);
     actDesc.putObject(cTID('T   '), cTID('Rctn'), actDesc2);
     executeAction(cTID('setd'), actDesc, DialogModes.NO);
+};
+
+
+// Inverse selection
+ChurchBudgetSwissKnife.prototype.invertSelection = function() {
+    executeAction(cTID('Invs'), undefined, DialogModes.NO);
+};
+
+// Delete selection
+ChurchBudgetSwissKnife.prototype.deleteSelection = function() {
+    executeAction(cTID('Dlt '), undefined, DialogModes.NO);
 };
 
 
@@ -135,12 +99,12 @@ ChurchBudgetSwissKnife.prototype.selectDollarProofBorder() = function() {
 /////////////////////////////////////////////////////////////
 
 // Copy
-ChurchBudgetSwissKnife.prototype.clipboardCopy() = function() {
+ChurchBudgetSwissKnife.prototype.clipboardCopy = function() {
     executeAction(cTID('copy'), undefined, DialogModes.NO);
 };
 
 // Paste in place
-ChurchBudgetSwissKnife.prototype.pasteInPlace() = function() {
+ChurchBudgetSwissKnife.prototype.pasteInPlace = function() {
     var actDesc = new ActionDescriptor();
     actDesc.putBoolean(sTID("inPlace"), true);
     actDesc.putEnumerated(cTID('AntA'), cTID('Annt'), cTID('Anno'));
@@ -156,7 +120,7 @@ ChurchBudgetSwissKnife.prototype.pasteInPlace() = function() {
 
 
 // close without saving
-ChurchBudgetSwissKnife.prototype.closeWithoutSaving() = function() {
+ChurchBudgetSwissKnife.prototype.closeWithoutSaving = function() {
     var actDesc = new ActionDescriptor();
     actDesc.putEnumerated(cTID('Svng'), cTID('YsN '), cTID('N   '));
     executeAction(cTID('Cls '), actDesc, DialogModes.NO);
@@ -164,13 +128,13 @@ ChurchBudgetSwissKnife.prototype.closeWithoutSaving() = function() {
 
 
 // Save as copy to c:\eps\dump\clipboard.png
-ChurchBudgetSwissKnife.prototype.saveToClipboardPNG() = function() {
-    this.flatten();
+ChurchBudgetSwissKnife.prototype.saveToClipboardPNG = function() {
+    this.flattenImage();
     this.convertToRGB();
     this.saveAsCopyPNG(CLIPBOARDPNGPATH);
 };
 
-ChurchBudgetSwissKnife.prototype.saveAsCopyPNG(filePath) = function() {
+ChurchBudgetSwissKnife.prototype.saveAsCopyPNG = function(filePath) {
     var actDesc = new ActionDescriptor();
     var actDesc2 = new ActionDescriptor();
     actDesc2.putEnumerated(sTID("PNGInterlaceType"), sTID("PNGInterlaceType"), sTID("PNGInterlaceNone"));
@@ -189,7 +153,7 @@ ChurchBudgetSwissKnife.prototype.saveAsCopyPNG(filePath) = function() {
 /////////////////////////////////////////////////////////////
 
 // Flatten Image
-ChurchBudgetSwissKnife.prototype.flattenImage() = function() {
+ChurchBudgetSwissKnife.prototype.flattenImage = function() {
     executeAction(sTID('flattenImage'), undefined, DialogModes.NO);
 };
 
@@ -203,47 +167,47 @@ ChurchBudgetSwissKnife.prototype.flattenImage() = function() {
 
 
 // open any document
-ChurchBudgetSwissKnife.prototype.openDocument(filePath) = function() {
+ChurchBudgetSwissKnife.prototype.openDocument = function(filePath) {
     var actDesc = new ActionDescriptor();
     actDesc.putPath(cTID('null'), new File(filePath));
     executeAction(cTID('Opn '), actDesc, DialogModes.NO);
 };
 
-ChurchBudgetSwissKnife.prototype.openPNGTemplate() = function() {
+ChurchBudgetSwissKnife.prototype.openPNGTemplate = function() {
     this.openDocument(TEMPLATEBASEPATH + PNGTEMPLATE);
 };
 
-ChurchBudgetSwissKnife.prototype.openFontToolsTemplate() = function() {
+ChurchBudgetSwissKnife.prototype.openFontToolsTemplate = function() {
     this.openDocument(TEMPLATEBASEPATH + FNTTOOLSTEMPLATE);
 };
 
 // proof templates
 
-ChurchBudgetSwissKnife.prototype.openProofTemplateBookletCover() = function() {
+ChurchBudgetSwissKnife.prototype.openProofTemplateBookletCover = function() {
     this.openDocument(TEMPLATEBASEPATH + PROOFTEMPLATEBOOKLETCOVER);
 };
 
-ChurchBudgetSwissKnife.prototype.openProofTemplateBooklet() = function() {
+ChurchBudgetSwissKnife.prototype.openProofTemplateBooklet = function() {
     this.openDocument(TEMPLATEBASEPATH + PROOFTEMPLATEBOOKLET);
 };
 
-ChurchBudgetSwissKnife.prototype.openProofTemplateCarton() = function() {
+ChurchBudgetSwissKnife.prototype.openProofTemplateCarton = function() {
     this.openDocument(TEMPLATEBASEPATH + PROOFTEMPLATECARTON);
 };
 
-ChurchBudgetSwissKnife.prototype.openProofTemplateDollar() = function() {
+ChurchBudgetSwissKnife.prototype.openProofTemplateDollar = function() {
     this.openDocument(TEMPLATEBASEPATH + PROOFTEMPLATEDOLLAR);
 };
 
-ChurchBudgetSwissKnife.prototype.openProofTemplatePremier() = function() {
+ChurchBudgetSwissKnife.prototype.openProofTemplatePremier = function() {
     this.openDocument(TEMPLATEBASEPATH + PROOFTEMPLATEPREMIER);
 };
 
-ChurchBudgetSwissKnife.prototype.openProofTemplateMailback() = function() {
+ChurchBudgetSwissKnife.prototype.openProofTemplateMailback = function() {
     this.openDocument(TEMPLATEBASEPATH + PROOFTEMPLATEMAILBACK);
 };
 
-ChurchBudgetSwissKnife.prototype.openProofTemplateDollarMM() = function() {
+ChurchBudgetSwissKnife.prototype.openProofTemplateDollarMM = function() {
     this.openDocument(TEMPLATEBASEPATH + PROOFTEMPLATEDOLLARMM);
 };
 
@@ -254,32 +218,94 @@ ChurchBudgetSwissKnife.prototype.openProofTemplateDollarMM() = function() {
 // WORKING WITH ALIGNMENT ///////////////////////////////////
 /////////////////////////////////////////////////////////////
 
+// get the values needed to plug into the move function from human-readable measurements (px, mm, in, etc)
+// remember that a translate starts from the center of the layer
+// we need the dpi because if not in pixels, Photoshop uses #Rlt, relating the movement to a 72dpi image
+ChurchBudgetSwissKnife.prototype.getTranslateValues = function(dpi, xMovement, yMovement, tUnit) {
+    // if we didn't pass a required parameter, return an error
+    if (typeof dpi === 'undefined') return {status: 1, message: 'getTranslateValues: Did not supply dpi'};
+    else if (typeof xMovement === 'undefined') return {status: 1, message: 'getTranslateValues: Did not supply xMovement'};
+    else if (typeof yMovement === 'undefined') return {status:1, message: 'getTranslateValues: Did not supply yMovement'};
+    else if (typeof tUnit === 'undefined') return {status:1, message: 'getTranslateValues: Did not supply tUnit'};
+    
+    else {
+        
+        xTranslate = this.convertToPSUnits(dpi, xMovement, tUnit);
+        yTranslate = this.convertToPSUnits(dpi, yMovement, tUnit);
+        
+        if (xTranslate.convertedUnit !== yTranslate.convertedUnit) return {status: 1, message: 'getTranslateValues: Did not get back same units from convertToPSUnits'};
+        else return {tUnit: xTranslate.convertedUnit, xMovement: xTranslate.convertedValue, yMovement: yTranslate.convertedValue};
+    }
+};
+
+
+// convert a number and a unit of measurement to the proper CTID() for the Photoshop grid
+// on PS grid, use pixels (#Pxl) or relational-to-72dpi (#Rlt)
+// returns an object {convertedValue, convertedUnit}
+ChurchBudgetSwissKnife.prototype.convertToPSUnits = function(dpi, value, unit) {
+    // if we didn't pass a required parameter, return an error
+    if (typeof dpi === 'undefined') return {status: 1, message: 'convertToPSUnits: Did not supply dpi'};
+    else if (typeof value === 'undefined') return {status: 1, message: 'convertToPSUnits: Did not supply value'};
+    else if (typeof unit === 'undefined') return {status:1, message: 'convertToPSUnits: Did not supply unit'};
+    
+    else {
+        
+        // if it's in pixels, we don't need to do any math
+        if (unit == "px" || unit == "pxs" || unit == "pixel" || unit == "pixels") {
+            return {
+                convertedValue: value,
+                convertedUnit: '#Pxl'
+            };
+        }
+    
+        else {            
+            // if we're in metric, convert to inches
+            
+            if (unit == "cm" || unit == "cms" || unit == "centimeter" || unit == "centimeters") {
+                // convert centimeters to millimeters
+                value *= 10;
+                unit == "mm";
+            }
+        
+            if (unit == "mm" || unit == "mms" || unit == "millimeter" || unit == "millimeters") {
+                // convert to inches
+                value *= (1/25.4);
+                
+                // divide by dpi/72 to get correct translation in inches
+                value = value / (dpi / 72);
+                unit = "in";
+            }
+        
+            // by now all proper measurements should be in inches
+            if (unit !== "in" && unit !== "ins" && unit !== "inch" && unit !== "inches") {
+                // return error
+                return {status: 1, message: 'convertToPSUnits: Did not supply a proper unit'};
+            }
+        
+            else {
+                return {
+                    convertedValue: value,
+                    convertedUnit: '#Rlt'
+                };
+            }
+        }
+    }
+};
+
 // move active layer
-ChurchBudgetSwissKnife.prototype.moveActiveLayer = function(hunit, horizontal, vunit, vertical) {
+ChurchBudgetSwissKnife.prototype.moveActiveLayer = function(tUnit, xMovement, yMovement) {
     var actDesc = new ActionDescriptor();
     var actRef = new ActionReference();
     actRef.putEnumerated(cTID('Lyr '), cTID('Ordn'), cTID('Trgt'));
     actDesc.putReference(cTID('null'), actRef);
     var actDesc2 = new ActionDescriptor();
-    actDesc2.putUnitDouble(cTID('Hrzn'), cTID(hunit), horizontal);
-    actDesc2.putUnitDouble(cTID('Vrtc'), cTID(vunit), vertical);
+    actDesc2.putUnitDouble(cTID('Hrzn'), cTID(tUnit), xMovement);
+    actDesc2.putUnitDouble(cTID('Vrtc'), cTID(tUnit), yMovement);
     actDesc.putObject(cTID('T   '), cTID('Ofst'), actDesc2);
     executeAction(cTID('move'), actDesc, DialogModes.NO);
 };
 
-// Move Quark Color Face on Full Color Template (PNG)
-ChurchBudgetSwissKnife.prototype.moveQuarkColorFaceOnPNG() = function() {
-    // horizontal = 50 px
-    // vertical = -220 px
-    this.moveActiveLayer("#Pxl", 50, "#Pxl", -220);
-};
 
-// Move PNG on Dollar Proof
-ChurchBudgetSwissKnife.prototype.movePNGOnDollarProof() = function() {
-    // horizontal = -9.6 mm
-    // vertical = 77.76 mm
-    this.moveActiveLayer("#Rlt", -9.6, "#Rlt", 77.76);
-};
 
 
 
@@ -289,7 +315,7 @@ ChurchBudgetSwissKnife.prototype.movePNGOnDollarProof() = function() {
 
 
 // Convert to RGB
-ChurchBudgetSwissKnife.prototype.convertToRGB() = function() {
+ChurchBudgetSwissKnife.prototype.convertToRGB = function() {
     var actDesc = new ActionDescriptor();
     actDesc.putClass(cTID('T   '), sTID("RGBColorMode"));
     actDesc.putBoolean(cTID('Fltt'), true);
@@ -299,7 +325,7 @@ ChurchBudgetSwissKnife.prototype.convertToRGB() = function() {
 
 
 // Fill with white
-ChurchBudgetSwissKnife.prototype.fillWithWhite() = function() {
+ChurchBudgetSwissKnife.prototype.fillWithWhite = function() {
     var actDesc = new ActionDescriptor();
     actDesc.putEnumerated(cTID('Usng'), cTID('FlCn'), cTID('Wht '));
     actDesc.putUnitDouble(cTID('Opct'), cTID('#Prc'), 100);
@@ -310,7 +336,7 @@ ChurchBudgetSwissKnife.prototype.fillWithWhite() = function() {
 
 // need a better way to do this
 // select marquee for folder number
-ChurchBudgetSwissKnife.prototype.selectMarqueeForFolderNumber() = function() {
+ChurchBudgetSwissKnife.prototype.selectMarqueeForFolderNumber = function() {
     var actDesc = new ActionDescriptor();
     var actRef = new ActionReference();
     actRef.putProperty(cTID('Chnl'), sTID("selection"));
@@ -329,54 +355,9 @@ ChurchBudgetSwissKnife.prototype.selectMarqueeForFolderNumber() = function() {
 
 
 // stop and continue dialog
-ChurchBudgetSwissKnife.prototype.stopContinueDialog(message) = function() {
+ChurchBudgetSwissKnife.prototype.stopContinueDialog = function(message) {
     var actDesc = new ActionDescriptor();
     actDesc.putString(cTID('Msge'), message);
     actDesc.putBoolean(cTID('Cntn'), true);
     executeAction(cTID('Stop'), actDesc, DialogModes.NO);
 };
-
-
-
-
-
-
-
-
-
-
-
-
-/*
-
-function() {
-  step1();      // Image Size
-  step2();      // Set
-  step3();      // Copy
-  step4();      // Close
-  step5();      // Open
-  step6();      // Paste
-  step7();      // Move
-  step8();      // Set
-  step9();      // Fill
-  step10();      // Set
-  step11();      // Flatten Image
-  step12();      // Convert Mode
-  step13();      // Save
-  step14();      // Scripts
-  step15(true, true, "Go to PNGFont and load from clipboard to save the font, then come back and continue for your proof sheet");      // Stop
-  step16();      // Flatten Image
-  step17();      // Set
-  step18();      // Copy
-  step19();      // Open
-  step20();      // Paste
-  step21();      // Move
-  step22();      // Set
-  step23();      // Inverse
-  step24();      // Delete
-  step25();      // Set
-  step26();      // Scripts
-  step27(true, true, "If everything looks okay on the proof, continue to print proof and clean sheet, and save PDF of proof");      // Stop
-  step28();      // Scripts
-};
-*/
