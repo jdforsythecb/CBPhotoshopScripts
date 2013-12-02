@@ -43,6 +43,16 @@ ChurchBudgetSwissKnife.prototype.resizeToDPI = function(dpi, scaleStyles) {
     executeAction(sTID('imageSize'), actDesc, DialogModes.NO);
 };
 
+// rotate currect layer by number of degrees
+ChurchBudgetSwissKnife.prototype.rotateByDegrees = function(deg) {
+    var actDesc = new ActionDescriptor();
+    var actRef = new ActionReference();
+    actRef.putEnumerated(cTID('Lyr '), cTID('Ordn'), cTID('Trgt'));
+    actDesc.putReference(cTID('null'), actRef);
+    actDesc.putUnitDouble(cTID('Angl'), cTID('#Ang'), deg);
+    executeAction(cTID('Rtte'), actDesc, DialogModes.NO);
+};
+
 /////////////////////////////////////////////////////////////
 // WORKING WITH SELECTIONS //////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -101,6 +111,11 @@ ChurchBudgetSwissKnife.prototype.deleteSelection = function() {
 // Copy
 ChurchBudgetSwissKnife.prototype.clipboardCopy = function() {
     executeAction(cTID('copy'), undefined, DialogModes.NO);
+};
+
+// cut
+ChurchBudgetSwissKnife.prototype.clipboardCut = function() {
+    executeAction(cTID('cut '), undefined, DialogModes.NO);
 };
 
 // Paste in place
@@ -359,5 +374,11 @@ ChurchBudgetSwissKnife.prototype.stopContinueDialog = function(message) {
     var actDesc = new ActionDescriptor();
     actDesc.putString(cTID('Msge'), message);
     actDesc.putBoolean(cTID('Cntn'), true);
-    executeAction(cTID('Stop'), actDesc, DialogModes.NO);
+    executeAction(cTID('Stop'), actDesc, DialogModes.ALL);
 };
+
+// generic information dialog
+ChurchBudgetSwissKnife.prototype.informationDialog = function(message) {
+    alert(message);
+};
+

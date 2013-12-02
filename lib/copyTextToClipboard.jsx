@@ -29,7 +29,8 @@ copyTextToClipboard = function(text) {
         var clipBatFile = new File(folderForTempFile + "/clipboard.bat")
         if (clipBatFile.exists) clipBatFile.remove();
         clipBatFile.open('w');
-        clipBatFile.writeln("cat \"" + clipTxtFile.fsName + "\" | clip");
+        // tell clip to get the contents of the text file and put on the clipboard
+        clipBatFile.writeln("clip < " + clipTxtFile.fsName);
         // make the batch file delete the text file and then itself
         clipBatFile.writeln("del \"" + clipTxtFile.fsName + "\"");
         clipBatFile.writeln("del \"" + clipBatFile.fsName + "\"");

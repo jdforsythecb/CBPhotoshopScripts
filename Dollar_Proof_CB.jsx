@@ -14,7 +14,10 @@ CB.mainDoc = app.activeDocument;
 CB.bgLayer = CB.mainDoc.layers.getByName("WhiteBG");
 
 // font code layer
-CB.fontCode = CB.mainDoc.layers.getByName("FONTCODE");
+CB.fontCodeLayer = CB.mainDoc.layers.getByName("FONTCODE");
+
+// flap layer
+CB.flapLayer = CB.mainDoc.layers.getByName("Flap");
 
 // church budget group
 CB.CB = CB.mainDoc.layerSets.getByName("Proof").layerSets.getByName("ChurchBudget");
@@ -36,6 +39,8 @@ CB.LeftNumsHigh = CB.mainDoc.layerSets.getByName("DateNumbers").artLayers.getByN
 CB.LeftNumsLow = CB.mainDoc.layerSets.getByName("DateNumbers").artLayers.getByName("Left Nums Low");
 CB.RightNumsHigh = CB.mainDoc.layerSets.getByName("DateNumbers").artLayers.getByName("Right Nums High");
 CB.RightNumsLow = CB.mainDoc.layerSets.getByName("DateNumbers").artLayers.getByName("Right Nums Low");
+CB.LeftNumsFlap = CB.mainDoc.layerSets.getByName("DateNumbers").artLayers.getByName("Left Nums Flap");
+CB.RightNumsFlap = CB.mainDoc.layerSets.getByName("DateNumbers").artLayers.getByName("Right Nums Flap");
 CB.DateHigh = CB.mainDoc.layerSets.getByName("DateNumbers").artLayers.getByName("Date High");
 CB.DateLow = CB.mainDoc.layerSets.getByName("DateNumbers").artLayers.getByName("Date Low");
 
@@ -45,7 +50,7 @@ try {
 } catch(e) {}
 
 try {
-    CB.DoubleStock = CB.mainDoc.layerSets.getByName("DateNumbers").artLayers.getByName("DoubleStockDating");
+    CB.DoubleStock = CB.mainDoc.layerSets.getByName("DateNumbers").layerSets.getByName("DoubleStockDating");
 } catch(e) {}
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -68,11 +73,9 @@ if( BridgeTalk.appName == "photoshop" ) {
     // start by selecting the background layer to insert copy above
     CB.mainDoc.activeLayer = CB.bgLayer;
 
-    // get the folder-font code from user input
-    CB.font = prompt ("Enter the font code", "A", "Enter the font code");
 
     // set the text of the font code text layer (CB.folder should have been set by calling script)
-    CB.fontCode.textItem.contents = CB.folder + " " + CB.font;
+    CB.fontCodeLayer.textItem.contents = CB.folder + " " + CB.fontCode;
     
 /*    
     // if it begins with a P and the next character is not a dash, it's premier
@@ -107,8 +110,14 @@ if( BridgeTalk.appName == "photoshop" ) {
         
     // button click handlers, set the visibility of the date/number/addressing layers
     dateNumDialog.button0.onClick = function() {
-                                                        CB.LeftNumsLow.visible = true;
-                                                        CB.RightNumsLow.visible = true;
+                                                        if (CB.isFace) {
+                                                            CB.LeftNumsLow.visible = true;
+                                                            CB.RightNumsLow.visible = true;
+                                                        }
+                                                        else if (CB.isFlap) {
+                                                            CB.LeftNumsFlap.visible = true;
+                                                            CB.RightNumsFlap.visible = true;
+                                                        }
                                                         CB.DateHigh.visible = true;
                                                         dateNumDialog.close();
     }
@@ -197,5 +206,10 @@ if( BridgeTalk.appName == "photoshop" ) {
                                         dlg.close();
                               }
     dlg.show();
+    
+    // if this is a flap job, show the flap outline
+    if (CB.isFlap) {
+        CB.flapLayer.visible = true;
+    }
 
 }

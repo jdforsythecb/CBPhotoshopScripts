@@ -8,33 +8,11 @@
 // include the library of utils for user-inputted folder number strings
 #include '/g/jdforsythe/Settings/Photoshop Scripts/lib/folderNumberStringUtils.jsx'
 
-// create the universal global object if it doesn't exist
-var CB = CB || {};
-
-// get the folder-font code from user input
-userInputFolder = prompt ("Enter the folder number", "A-0101", "Enter the folder number");
-
-// create an instance of the folderNumberStringUtils object with the user-inputted folder string
-FolderUtils = new folderNumberStringUtils(userInputFolder);
-
-// save company globally
-CB.isMM = FolderUtils.isMM;
-CB.isCB = FolderUtils.isCB;
-CB.isMcDaniel = FolderUtils.isMCD;
-CB.isUnited = FolderUtils.isUN;
-
-// copy the sanitized folder number to the clipboard
-CB.folder = FolderUtils.folder;
-clip = copyTextToClipboard(CB.folder);
-if (clip.status == 1) {
-    alert("Failed to copy the folder number to the clipboard! Error: " + clip.message);
-}
 
 
 // create an instance of the swiss knife object
-QuarkColorFace = new ChurchBudgetSwissKnife(); /*ChurchBudgetSwissKnife.Programs.QUARK,
-                                            ChurchBudgetSwissKnife.JobSizes.DOLLAR,
-                                            ChurchBudgetSwissKnife.Formats.QUARKCOLORTIFFPRINTER);*/
+QuarkColorFace = new ChurchBudgetSwissKnife();
+
                                             
                                             
 /**********************************************
