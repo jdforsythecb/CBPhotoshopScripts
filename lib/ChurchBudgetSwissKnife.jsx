@@ -1,4 +1,4 @@
-﻿
+﻿#target photoshop
 ChurchBudgetSwissKnife = function() {
 
     // private constants
