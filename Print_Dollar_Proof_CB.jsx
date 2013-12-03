@@ -18,8 +18,8 @@ var snapshot = docRef.historyStates.length - 1;
 docRef.printSettings.flip = false;
 docRef.printSettings.setPagePosition(DocPositionStyle.PRINTCENTERED);
 docRef.printSettings.negative = false;
-//docRef.printOneCopy();
-alert("Printing proof...");
+docRef.printOneCopy();
+//alert("Printing proof...");
 
 
 
@@ -116,5 +116,5 @@ docRef.layers.getByName("Flap").visible = false;
 docRef.printSettings.flip = false;
 docRef.printSettings.setPagePosition(DocPositionStyle.PRINTCENTERED);
 docRef.printSettings.negative = false;
-//docRef.printOneCopy(); //Print One Copy
-alert("Printing clean...");
+docRef.printOneCopy(); //Print One Copy
+//alert("Printing clean...");

@@ -2,7 +2,7 @@
 #target photoshop
 
 // always start with the global
-#include "/g/jdforsythe/Settings/Photoshop Scripts/CopySettingGlobal.jsx"
+#include "/g/jdforsythe/Settings/Photoshop Scripts/CopySettingGlobal.jsx";
 
 
 // create a dialog box to ask what the user wants to do

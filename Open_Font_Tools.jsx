@@ -4,10 +4,10 @@
 // bring in the program execution prototype library
 
 // create and run an instance of the Exec object for PNG font
-var FntTool = new Exec(new File("/c/FontTool/fnttool3.exe"));
+var FontTool = new Exec(new File("/c/FontTool/fnttool3.exe"));
 
-FntTool.logEnabled = true;
-FntTool.setLogFileName("FontToolExec.log");
+FontTool.logEnabled = true;
+FontTool.setLogFileName("FontToolExec.log");
 
 // create a go method, with optional arguments
 // for now this is just going to be asynchronous

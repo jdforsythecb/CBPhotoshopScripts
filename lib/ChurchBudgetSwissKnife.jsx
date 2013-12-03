@@ -16,6 +16,8 @@ ChurchBudgetSwissKnife = function() {
     PROOFTEMPLATEMAILBACK = "Proof Template Mailback.psd";
     PROOFTEMPLATEDOLLARMM = "Proof Template Dollar MM.psd";
     
+    this.ready = false;
+    
     // private functions
     cTID = function(s) { return app.charIDToTypeID(s); };
     sTID = function(s) { return app.stringIDToTypeID(s); };
@@ -338,6 +340,25 @@ ChurchBudgetSwissKnife.prototype.convertToRGB = function() {
     executeAction(sTID('convertMode'), actDesc, DialogModes.NO);
 };
 
+// Convert to grayscale
+ChurchBudgetSwissKnife.prototype.convertToGrayscale = function() {
+    var actDesc = new ActionDescriptor();
+    actDesc.putClass(cTID('T   '), cTID('Grys'));
+    executeAction(sTID('convertMode'), actDesc, DialogModes.NO);
+};
+
+// Bitmap with Diffusion dither
+ChurchBudgetSwissKnife.prototype.convertToBitmapDiffusion = function() {
+    // dpi = 299.998992919922 for font tools
+    dpi = 299.998992919922;
+    var actDesc1 = new ActionDescriptor();
+    var actDesc2 = new ActionDescriptor();
+    actDesc2.putUnitDouble(cTID('Rslt'), cTID('#Rsl'), dpi);
+    actDesc2.putEnumerated(cTID('Mthd'), cTID('Mthd'), cTID('DfnD'));
+    actDesc1.putObject(cTID('T   '), cTID('BtmM'), actDesc2);
+    executeAction(sTID('convertMode'), actDesc1, DialogModes.NO);
+};
+
 
 // Fill with white
 ChurchBudgetSwissKnife.prototype.fillWithWhite = function() {
@@ -346,6 +367,17 @@ ChurchBudgetSwissKnife.prototype.fillWithWhite = function() {
     actDesc.putUnitDouble(cTID('Opct'), cTID('#Prc'), 100);
     actDesc.putEnumerated(cTID('Md  '), cTID('BlnM'), cTID('Nrml'));
     executeAction(cTID('Fl  '), actDesc, DialogModes.NO);
+};
+
+
+// accented edges (for black and white to font tools)
+ChurchBudgetSwissKnife.prototype.accentedEdges = function() {
+    var actDesc = new ActionDescriptor();
+    actDesc.putEnumerated(cTID('GEfk'), cTID('GEft'), cTID('AccE'));
+    actDesc.putInteger(cTID('EdgW'), 1);
+    actDesc.putInteger(cTID('EdgB'), 10);
+    actDesc.putInteger(cTID('Smth'), 1);
+    executeAction(cTID('AccE'), actDesc, DialogModes.NO);
 };
 
 
@@ -375,6 +407,40 @@ ChurchBudgetSwissKnife.prototype.stopContinueDialog = function(message) {
     actDesc.putString(cTID('Msge'), message);
     actDesc.putBoolean(cTID('Cntn'), true);
     executeAction(cTID('Stop'), actDesc, DialogModes.ALL);
+};
+
+// non-modal (doesn't steal focus, allows interaction with the document) dialog
+ChurchBudgetSwissKnife.prototype.nonModalDialog = function(title, message) {
+
+    var bt = new BridgeTalk();
+    bt.target = "photoshop";
+    bt.message = "var w = new Window('palette', '" + title + "'); w.add('statictext', undefined, '" + message + "'); w.center(); w.show();";
+    bt.send();
+
+
+/*    var win, windowResource;
+    
+    windowResource = "palette { \
+        orientation: 'column', \
+        alignChildren: ['fill', 'top'],  \
+        preferredSize:[300, 130], \
+        text: '" + title + "',  \
+        margins:15, \
+        \
+        bottomGroup: Group{ \
+            continueButton: Button { text: 'Continue', properties:{name:'ok'}, size: [120,24], alignment:['right', 'center'] }, \
+        }\
+    }";
+    
+    win = new Window(windowResource);
+     
+    win.bottomGroup.continueButton.onClick = function() {
+        this.ready = true;
+        return win.close();
+    };
+     
+    win.show();
+*/
 };
 
 // generic information dialog
