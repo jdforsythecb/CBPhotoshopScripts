@@ -55,8 +55,11 @@ CB.JobSides = {
 // things we're always going to need:
 
 
+/* for future reference
 // include the library to copy text to the clipboard
 #include '/g/jdforsythe/Settings/Photoshop Scripts/lib/copyTextToClipboard.jsx'
+*/
+
 
 // include the library of utils for user-inputted folder number strings
 #include '/g/jdforsythe/Settings/Photoshop Scripts/lib/folderNumberStringUtils.jsx'
@@ -78,13 +81,16 @@ CB.isCB = FolderUtils.isCB;
 CB.isMcDaniel = FolderUtils.isMCD;
 CB.isUnited = FolderUtils.isUN;
 
+/**************************
+   for future reference
+**************************
 // copy the sanitized folder number to the clipboard
 CB.folder = FolderUtils.folder;
 clip = copyTextToClipboard(CB.folder);
 if (clip.status == 1) {
     alert("Failed to copy the folder number to the clipboard! Error: " + clip.message);
 }
-
+*/
 
 
 // and we're always going to need an instance of the swiss knife to do manipulations on the documents

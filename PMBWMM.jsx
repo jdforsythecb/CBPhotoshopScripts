@@ -71,7 +71,7 @@ if (CB.needProof) {
     }
 
     // close proof document
-    CB.swissKnife.closeWithoutSaving();
+    //CB.swissKnife.closeWithoutSaving();
 }
 
 

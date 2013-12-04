@@ -65,11 +65,26 @@ CB.swissKnife.clipboardCopy();
 if (CB.isFace) CB.swissKnife.closeWithoutSaving();
 /************************
     END FACE SIDE ONLY
- ************************/
+************************/
+
+
+// copy the folder number to the clipboard for pasting into PNG Font's open font dialog
+
+// include the library to copy text to the clipboard
+#include '/g/jdforsythe/Settings/Photoshop Scripts/lib/copyTextToClipboard.jsx'
+
+// copy the sanitized folder number to the clipboard
+CB.folder = FolderUtils.folder;
+clip = copyTextToClipboard(CB.folder);
+if (clip.status == 1) {
+    alert("Warning: Failed to copy the folder number to the clipboard! Error: " + clip.message);
+}
 
 
 // open the PNG Full Color Template
 CB.swissKnife.openPNGTemplate();
+
+
 
 // paste in place
 CB.swissKnife.pasteInPlace();
@@ -122,7 +137,11 @@ CB.swissKnife.saveToClipboardPNG();
 // open PNG Font
 #include "/g/jdforsythe/Settings/Photoshop Scripts/Open_PNG_Font.jsx"
 
-CB.swissKnife.informationDialog("Save into PNG Font and then continue");
+message = "When PNG Font opens, press CTRL+V to paste in the folder number.\n \
+           \"Load from clipboard\" and create or overwrite font code \"" + CB.fontCode + "\" \n\n \
+           Then come back and press \"Okay\"";
+
+CB.swissKnife.informationDialog(message);
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////

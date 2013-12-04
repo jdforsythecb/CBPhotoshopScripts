@@ -14,8 +14,8 @@ var docRef = app.activeDocument;
 docRef.printSettings.flip = false;
 docRef.printSettings.setPagePosition(DocPositionStyle.PRINTCENTERED);
 docRef.printSettings.negative = false;
-docRef.printOneCopy();
-
+//docRef.printOneCopy();
+alert("printing proof");
 
 
 /*------------------------------------------------------------
@@ -70,7 +70,7 @@ var pdfpath = "/g/Jalan/PROOFS/";
 
 // flatten layers before saving
 docRef.flatten();
-
+/*
 // save options for PDF
 var pdf = new File(pdfpath + filename);
 var pdfSaveOptions = new PDFSaveOptions()
@@ -90,3 +90,5 @@ pdfSaveOptions.layers = false;
 pdfSaveOptions.preserveEditing=false;
 pdfSaveOptions.jpegQuality = 10;
 docRef.saveAs(pdf, pdfSaveOptions, true, Extension.LOWERCASE);
+*/
+alert("proof: " + pdfpath + filename);
