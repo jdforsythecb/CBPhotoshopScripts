@@ -13,12 +13,12 @@ CB.swissKnife = new ChurchBudgetSwissKnife();
 
 // invert selection and run accented edges
 //CB.swissKnife.invertSelection();
-
+/*
 CB.swissKnife.accentedEdges();
 
 // select none
 CB.swissKnife.selectNone();
-
+*/
 // convert to grayscale first
 CB.swissKnife.convertToGrayscale();
 
