@@ -17,6 +17,7 @@ ChurchBudgetSwissKnife = function() {
     PROOFTEMPLATEDOLLARMM = "Proof Template Dollar MM.psd";
     
     this.ready = false;
+
     
     // private functions
     cTID = function(s) { return app.charIDToTypeID(s); };
@@ -24,8 +25,14 @@ ChurchBudgetSwissKnife = function() {
 }
 
 
-
-
+// a document object that always contains the ACTIVE document
+//
+// you use this just like a property that you'd store but it's a method returning the object, so, internally, e.g:
+// this.Document().selection.selectAll()
+// always selects all on the current active document, regardless of when this SwissKnife was instantiated
+ChurchBudgetSwissKnife.prototype.Document = function() {
+    return app.activeDocument;
+};
 
 ///////////////////////////////////////////////////////////////////////////////////////
 // PUBLIC METHODS /////////////////////////////////////////////////////////////////////
@@ -61,25 +68,32 @@ ChurchBudgetSwissKnife.prototype.rotateByDegrees = function(deg) {
 
 // select all
 ChurchBudgetSwissKnife.prototype.selectAll = function() {
-    var actDesc = new ActionDescriptor();
+    /*var actDesc = new ActionDescriptor();
     var actRef = new ActionReference();
     actRef.putProperty(cTID('Chnl'), sTID("selection"));
     actDesc.putReference(cTID('null'), actRef);
     actDesc.putEnumerated(cTID('T   '), cTID('Ordn'), cTID('Al  '));
     executeAction(cTID('setd'), actDesc, DialogModes.NO);
+    */
+    this.Document().selection.selectAll();
 };
 
 // select None
 ChurchBudgetSwissKnife.prototype.selectNone = function() {
-    var actDesc = new ActionDescriptor();
+    /*var actDesc = new ActionDescriptor();
     var actRef = new ActionReference();
     actRef.putProperty(cTID('Chnl'), sTID("selection"));
     actDesc.putReference(cTID('null'), actRef);
     actDesc.putEnumerated(cTID('T   '), cTID('Ordn'), cTID('None'));
     executeAction(cTID('setd'), actDesc, DialogModes.NO);
+    */
+    this.Document().selection.deselect();
 };
 
 // select rectangle
+// this actionDescriptor method is useful for easily recording a select and inputting
+// the values from the action into this method. for (x,y) bounds use
+// this.Document().selection.select(bounds)
 ChurchBudgetSwissKnife.prototype.selectRect = function(top, right, bottom, left, unit) {
     var actDesc = new ActionDescriptor();
     var actRef = new ActionReference();
@@ -92,7 +106,7 @@ ChurchBudgetSwissKnife.prototype.selectRect = function(top, right, bottom, left,
     actDesc2.putUnitDouble(cTID('Left'), cTID(unit), left);
     actDesc.putObject(cTID('T   '), cTID('Rctn'), actDesc2);
     executeAction(cTID('setd'), actDesc, DialogModes.NO);
-};
+    };
 
 
 // Inverse selection
@@ -138,9 +152,7 @@ ChurchBudgetSwissKnife.prototype.pasteInPlace = function() {
 
 // close without saving
 ChurchBudgetSwissKnife.prototype.closeWithoutSaving = function() {
-    var actDesc = new ActionDescriptor();
-    actDesc.putEnumerated(cTID('Svng'), cTID('YsN '), cTID('N   '));
-    executeAction(cTID('Cls '), actDesc, DialogModes.NO);
+    this.Document().close(SaveOptions.DONOTSAVECHANGES);
 };
 
 
@@ -171,7 +183,8 @@ ChurchBudgetSwissKnife.prototype.saveAsCopyPNG = function(filePath) {
 
 // Flatten Image
 ChurchBudgetSwissKnife.prototype.flattenImage = function() {
-    executeAction(sTID('flattenImage'), undefined, DialogModes.NO);
+    //executeAction(sTID('flattenImage'), undefined, DialogModes.NO);
+    this.Document().flatten();
 };
 
 // set active layer
@@ -342,21 +355,32 @@ ChurchBudgetSwissKnife.prototype.convertToRGB = function() {
 
 // Convert to grayscale
 ChurchBudgetSwissKnife.prototype.convertToGrayscale = function() {
+    /*
     var actDesc = new ActionDescriptor();
     actDesc.putClass(cTID('T   '), cTID('Grys'));
     executeAction(sTID('convertMode'), actDesc, DialogModes.NO);
+    */
+    this.Document().changeMode(ChangeMode.GRAYSCALE);
 };
 
 // Bitmap with Diffusion dither
 ChurchBudgetSwissKnife.prototype.convertToBitmapDiffusion = function() {
     // dpi = 299.998992919922 for font tools
     dpi = 299.998992919922;
+    
+    /*
     var actDesc1 = new ActionDescriptor();
     var actDesc2 = new ActionDescriptor();
     actDesc2.putUnitDouble(cTID('Rslt'), cTID('#Rsl'), dpi);
     actDesc2.putEnumerated(cTID('Mthd'), cTID('Mthd'), cTID('DfnD'));
     actDesc1.putObject(cTID('T   '), cTID('BtmM'), actDesc2);
     executeAction(sTID('convertMode'), actDesc1, DialogModes.NO);
+    */
+
+    bitmapSaveOptions = new BitmapConversionOptions();
+    bitmapSaveOptions.method = BitmapConversionType.DIFFUSIONDITHER;
+    bitmapSaveOptions.resolution = dpi;
+    this.Document().changeMode(ChangeMode.BITMAP, bitmapSaveOptions);
 };
 
 

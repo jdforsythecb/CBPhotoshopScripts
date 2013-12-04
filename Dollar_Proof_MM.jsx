@@ -28,6 +28,8 @@ CB.EO = CB.mainDoc.layerSets.getByName("Proof").layerSets.getByName("Advertiseme
 
 // dating and numbering layer refs
 CB.Addressing = CB.mainDoc.layers.getByName("Addressing");
+CB.NumLeftDateRight = CB.mainDoc.layerSets.getByName("NumLeft DateRight");
+CB.DateLeftNumRight = CB.mainDoc.layerSets.getByName("DateLeft NumRight");
 
 ////////////////////////////////////////////////////////////////////////////////
 // FUNCTION DECLARATIONS ///////////////////////////////////////////////////////
@@ -58,22 +60,35 @@ if( BridgeTalk.appName == "photoshop" ) {
     // dating and numbering
     // create a dialog window
     var dateNumDialog = new Window("dialog{text:'Pick options',\
-    bounds:[100,100,310,440],\
-    button0:Button{bounds:[10,10,200,30], text:'Addressed'},\
-    button1:Button{bounds:[10,40, 200, 60], text:'Loose'},\
+    bounds:[100,100,300,300],\
+    button0:Button{bounds:[10,10,200,30], text:'Addressed (### - DATE)'},\
+    button1:Button{bounds:[10,40, 200, 60], text:'Addressed (DATE - ###)'},\
+    button2:Button{bounds:[10,70,200,90], text:'Loose'},\
     };");
         
         
     // button click handlers, set the visibility of the date/number/addressing layers
     dateNumDialog.button0.onClick = function() {
                                                         CB.Addressing.visible = true;
+                                                        CB.NumLeftDateRight.visible = true;
                                                         dateNumDialog.close();
-    }
+    };
 
     dateNumDialog.button1.onClick = function() {
+                                                        CB.Addressing.visible = true;
+                                                        CB.DateLeftNumRight.visible = true;
                                                         dateNumDialog.close();
-    }
-        
+    };
+
+    dateNumDialog.button2.onClick = function() {
+                                                        // don't need to do anything special for loose
+                                                        dateNumDialog.close();
+    };
+
+    dateNumDialog.center();
+                                                      
+                                                      
+                                                      
     // show dialog
     dateNumDialog.show();
   
@@ -90,13 +105,14 @@ if( BridgeTalk.appName == "photoshop" ) {
                                         CB.TCS.visible = true;
                                         CB.EO.visible = true;
                                         dlg.close();
-                               }
+    };
                            
     dlg.button1.onClick = function() {
                                         CB.PS.visible = true;
                                         CB.EO.visible = true;
                                         dlg.close();
-                              }
+    };
+    dlg.center();
     dlg.show();
     
     // if this is a flap job, show the flap outline

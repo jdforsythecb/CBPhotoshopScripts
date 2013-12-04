@@ -30,9 +30,6 @@ CB.swissKnife.selectDollarProofBorder = function() {
     this.selectRect(263.28, 489.36, 482.4, 30.24, "#Rlt");
 };
 
-// open font tools early because it takes awhile
-#include "/g/jdforsythe/Settings/Photoshop Scripts/Open_Font_Tools.jsx"
-
 // on Black and white we have to first do the proof, if needed because of the poor state
 // of non-modal dialogs (can't pass an object - CB - to the later functions)
 
@@ -71,15 +68,13 @@ if (CB.needProof) {
     }
 
     // close proof document
-    //CB.swissKnife.closeWithoutSaving();
+    CB.swissKnife.closeWithoutSaving();
 }
 
 
 
 
 // else we don't need a proof, so just continue with going into font tools
-
-
 
 // select all, copy
 CB.swissKnife.selectAll();

@@ -25,8 +25,8 @@ CB.swissKnife.movePNGOnDollarProof = function() {
 
 // add a custom method for the translation needed from Quark+TIFF Printer Color to PNG flap side
 CB.swissKnife.movePMColorFlapOnPNG = function() {
-    // x=-36px, y=530px
-    translation = this.getTranslateValues(300, -36, 530, "px");
+    // x=0px, y=630px
+    translation = this.getTranslateValues(300, 0, 630, "px");
     this.moveActiveLayer(translation.tUnit, translation.xMovement, translation.yMovement);
 };
 
@@ -66,19 +66,6 @@ if (CB.isFace) CB.swissKnife.closeWithoutSaving();
 /************************
     END FACE SIDE ONLY
 ************************/
-
-
-// copy the folder number to the clipboard for pasting into PNG Font's open font dialog
-
-// include the library to copy text to the clipboard
-#include '/g/jdforsythe/Settings/Photoshop Scripts/lib/copyTextToClipboard.jsx'
-
-// copy the sanitized folder number to the clipboard
-CB.folder = FolderUtils.folder;
-clip = copyTextToClipboard(CB.folder);
-if (clip.status == 1) {
-    alert("Warning: Failed to copy the folder number to the clipboard! Error: " + clip.message);
-}
 
 
 // open the PNG Full Color Template
@@ -134,12 +121,26 @@ CB.swissKnife.flattenImage();
 // save to clipboard.png
 CB.swissKnife.saveToClipboardPNG();
 
+
+// copy the folder number to the clipboard for pasting into PNG Font's open font dialog
+
+// include the library to copy text to the clipboard
+#include '/g/jdforsythe/Settings/Photoshop Scripts/lib/copyTextToClipboard.jsx'
+
+// copy the sanitized folder number to the clipboard
+clip = copyTextToClipboard(CB.folder);
+if (clip.status == 1) {
+    alert("Warning: Failed to copy the folder number to the clipboard! Error: " + clip.message);
+}
+
+
+
 // open PNG Font
 #include "/g/jdforsythe/Settings/Photoshop Scripts/Open_PNG_Font.jsx"
 
 message = "When PNG Font opens, press CTRL+V to paste in the folder number.\n \
            \"Load from clipboard\" and create or overwrite font code \"" + CB.fontCode + "\" \n\n \
-           Then come back and press \"Okay\"";
+           Then come back and press \"Ok\"";
 
 CB.swissKnife.informationDialog(message);
 
@@ -175,7 +176,7 @@ if (CB.needProof) {
         CB.swissKnife.pasteInPlace();
         CB.swissKnife.movePMColorFaceOnPNG();
         CB.swissKnife.selectRect(304, 2070, 1180, 275, "#Pxl");
-        CB.swissKnife.selectInverse();
+        CB.swissKnife.invertSelection();
         CB.swissKnife.fillWithWhite();
         CB.swissKnife.selectNone();
         CB.swissKnife.flattenImage();
