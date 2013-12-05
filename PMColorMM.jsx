@@ -6,7 +6,7 @@ CB.isFlap = (CB.jobSide == CB.JobSides.FLAP);
                                             
 /**********************************************
     CUSTOM METHODS ON THE SWISS KNIFE OBJECT
- **********************************************/
+ **********************************************
 
 // add a custom method for the translation needed from Quark+TIFF Printer Color to PNG Face side
 CB.swissKnife.movePMColorFaceOnPNG = function() {
@@ -48,7 +48,7 @@ CB.swissKnife.selectDollarProofBorder = function() {
     // 263.28, 30.24, 482.4, 489.36 (relational to 72dpi, as recorded in an action)
     this.selectRect(263.28, 489.36, 482.4, 30.24, "#Rlt");
 };
-
+*/
                                             
 // set the image to 300dpi since the color tiff printer is 600dpi
 CB.swissKnife.resizeToDPI(300);

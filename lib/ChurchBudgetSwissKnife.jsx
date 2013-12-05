@@ -472,3 +472,130 @@ ChurchBudgetSwissKnife.prototype.informationDialog = function(message) {
     alert(message);
 };
 
+
+
+
+
+
+
+/********************************************************************************************** CHURCH BUDGET ******
+********************************************************************************************************************
+********************************************************************************************************************/
+// Quark + Color TIFF Printer (ImagePrinter Pro) + Face Side >> PNG Font Template
+ChurchBudgetSwissKnife.prototype.moveQuarkColorFaceOnPNG = function() {
+    // x=50px y=-220px (recorded in an action)
+    translation = this.getTranslateValues(300, 50, -220, "px");
+    this.moveActiveLayer(translation.tUnit, translation.xMovement, translation.yMovement);
+};
+
+// Quark + Color TIFF Printer (ImagePrinter Pro) + Flap Side >> PNG Font Template
+ChurchBudgetSwissKnife.prototype.moveQuarkColorFlapOnPNG = function() {
+    // x=-36px, y=530px
+    translation = this.getTranslateValues(300, -36, 530, "px");
+    this.moveActiveLayer(translation.tUnit, translation.xMovement, translation.yMovement);
+};
+
+// Quark + BW TIFF Printer (ImagePrinter Pro) + any job side >> Font Tools Template
+ChurchBudgetSwissKnife.prototype.moveQuarkBWOnFontTools = function() {
+    // x=40px y=80px (recorded in an action)
+    translation = this.getTranslateValues(300, 40, 80, "px");
+    this.moveActiveLayer(translation.tUnit, translation.xMovement, translation.yMovement);
+};
+
+// Quark + BW TIFF Printer (ImagePrinter Pro) + any job side >> Dollar Proof
+ChurchBudgetSwissKnife.prototype.moveQuarkBWOnDollarProof = function() {
+    // x=-5px y=114px
+    translation = this.getTranslateValues(300, -5, 114, "px");
+    this.moveActiveLayer(translation.tUnit, translation.xMovement, translation.yMovement);
+};
+
+
+/*********************************************************************************************** MONTHLY MAIL ******
+********************************************************************************************************************
+********************************************************************************************************************/
+
+// PageMaker + Color TIFF Printer (ImagePrinter Pro) + Face Side >> PNG Font Template
+ChurchBudgetSwissKnife.prototype.movePMColorFaceOnPNG = function() {
+    // x=-1px, y=-286px
+    translation = this.getTranslateValues(300, -1, -286, "px");
+    this.moveActiveLayer(translation.tUnit, translation.xMovement, translation.yMovement);
+};
+
+// PageMaker + Color TIFF Printer (ImagePrinter Pro) + Flap Side >> PNG Font Template
+ChurchBudgetSwissKnife.prototype.movePMColorFlapOnPNG = function() {
+    // x=0px, y=630px
+    translation = this.getTranslateValues(300, 0, 630, "px");
+    this.moveActiveLayer(translation.tUnit, translation.xMovement, translation.yMovement);
+};
+
+// PageMaker + BW TIFF Printer (ImagePrinter Pro) + any job side >> Font Tools Template
+ChurchBudgetSwissKnife.prototype.movePMBWOnFontTools = function() {
+    // x=-2px y=2px (recorded in an action)
+    translation = this.getTranslateValues(300, -2, 2, "px");
+    this.moveActiveLayer(translation.tUnit, translation.xMovement, translation.yMovement);
+};
+
+// PageMaker + BW TIFF Printer (ImagePrinter Pro) + any job side >> Dollar Proof
+ChurchBudgetSwissKnife.prototype.movePMBWOnDollarProof = function() {
+    // x=-40px y=60px
+    translation = this.getTranslateValues(300, -40, 60, "px");
+    this.moveActiveLayer(translation.tUnit, translation.xMovement, translation.yMovement);
+};
+
+
+/********************************************************************************************** BOTH SIDES *********
+********************************************************************************************************************
+********************************************************************************************************************/
+
+// PNG Font Template - flip the flap to the top for flap side jobs
+ChurchBudgetSwissKnife.prototype.flipFlapOnPNG = function() {
+    // select the flap area at the bottom of the template, cut and paste again (in place) as a new layer
+    this.selectRect(1868, 2148, 2072, 177, "#Pxl");
+    this.clipboardCut();
+    this.pasteInPlace();
+        // translation for moving the flap (x=0, y=-1862px)
+    translation = this.getTranslateValues(300, 0, -1862, "px");
+    this.moveActiveLayer(translation.tUnit, translation.xMovement, translation.yMovement);
+};
+
+
+// PNG Font Template (face side area) >> Dollar Proof Template
+ChurchBudgetSwissKnife.prototype.movePNGOnDollarProof = function() {
+    // x=-9.6 y=77.76 (relational to 72dpi, as recorded in an action)
+    translation = this.getTranslateValues(72, -9.6, 77.76, "in");
+    this.moveActiveLayer(translation.tUnit, translation.xMovement, translation.yMovement);
+};
+
+// select the area containing the envelope on Dollar Proof Template (for inverting and clearing around it)
+ChurchBudgetSwissKnife.prototype.selectDollarProofBorder = function() {
+    // top, right, bottom, left, unit
+    // 263.28, 30.24, 482.4, 489.36 (relational to 72dpi, as recorded in an action)
+    this.selectRect(263.28, 489.36, 482.4, 30.24, "#Rlt");
+};
+
+
+
+
+
+
+
+
+
+
+/*******************************************************************************************JANKY AS HELL **********
+********************************************************************************************************************
+********************************************************************************************************************/
+
+
+
+ChurchBudgetSwissKnife.prototype.clearQuarkFolderNumber = function() {
+    CB.swissKnife.selectMarqueeForFolderNumber();
+    CB.swissKnife.fillWithWhite();
+};
+
+ChurchBudgetSwissKnife.prototype.clearPMFolderNumber = function() {
+    CB.swissKnife.selectRect(304, 2070, 1180, 275, "#Pxl");
+    CB.swissKnife.invertSelection();
+    CB.swissKnife.fillWithWhite();
+    CB.swissKnife.selectNone();
+};
