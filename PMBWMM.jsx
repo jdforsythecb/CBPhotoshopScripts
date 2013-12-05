@@ -30,6 +30,9 @@ CB.swissKnife.selectDollarProofBorder = function() {
     this.selectRect(263.28, 489.36, 482.4, 30.24, "#Rlt");
 };
 
+// set the image to 300dpi since the color tiff printer is 600dpi
+CB.swissKnife.resizeToDPI(300);
+
 // on Black and white we have to first do the proof, if needed because of the poor state
 // of non-modal dialogs (can't pass an object - CB - to the later functions)
 
@@ -117,6 +120,7 @@ var bt = new BridgeTalk();
                         w.close(); \
                         var folder = \"" + CB.folder + "\"; \
                         fontCode = \"" + CB.fontCode + "\"; \
+                        isFlap = \"" + CB.isFlap + "\"; \
                         #include \"/g/jdforsythe/Settings/Photoshop Scripts/PMBW_after_dialogMM.jsx\"; \
                     }; \
                     w.show();";

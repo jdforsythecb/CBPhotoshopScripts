@@ -62,4 +62,22 @@ CB.swissKnife.informationDialog(message);
 CB.swissKnife.closeWithoutSaving();
 
 // close original document
-CB.swissKnife.closeWithoutSaving();
+//CB.swissKnife.closeWithoutSaving();
+
+// undo the resize to 300dpi
+CB.swissKnife.Document().activeHistoryState = CB.swissKnife.Document().historyStates[0];
+
+// if not flap
+if (!isFlap) {
+    CB.jobSide = CB.JobSides.FACE;
+}
+else {
+    CB.jobSide = CB.JobSides.FLAP;
+}
+
+/* 0, -305px fnt tools to png
+// cheating
+var cont = true;
+#include "/g/jdforsythe/Settings/Photoshop Scripts/CopySetting_Dollar_MM.jsx"
+
+*/
