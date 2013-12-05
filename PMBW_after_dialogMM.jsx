@@ -31,7 +31,8 @@ CB.swissKnife.convertToBitmapDiffusion();
 // include the library to copy text to the clipboard
 #include '/g/jdforsythe/Settings/Photoshop Scripts/lib/copyTextToClipboard.jsx'
 
-clip = copyTextToClipboard(folder);
+// we need the folder number with any letters lowercase for Font Tools
+clip = copyTextToClipboard(folder.toLowerCase());
 if (clip.status == 1) {
     alert("Failed to copy the folder number to the clipboard! Error: " + clip.message);
 }
@@ -62,10 +63,10 @@ CB.swissKnife.informationDialog(message);
 CB.swissKnife.closeWithoutSaving();
 
 // close original document
-//CB.swissKnife.closeWithoutSaving();
+CB.swissKnife.closeWithoutSaving();
 
 // undo the resize to 300dpi
-CB.swissKnife.Document().activeHistoryState = CB.swissKnife.Document().historyStates[0];
+//CB.swissKnife.Document().activeHistoryState = CB.swissKnife.Document().historyStates[0];
 
 // if not flap
 if (!isFlap) {

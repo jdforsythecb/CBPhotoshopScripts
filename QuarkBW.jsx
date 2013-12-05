@@ -30,30 +30,23 @@ CB.swissKnife.selectDollarProofBorder = function() {
     this.selectRect(263.28, 489.36, 482.4, 30.24, "#Rlt");
 };
 
-// open font tools early because it takes awhile
-#include "/g/jdforsythe/Settings/Photoshop Scripts/Open_Font_Tools.jsx"
+// set the image to 300dpi since the bw tiff printer is now 600dpi
+CB.swissKnife.resizeToDPI(300);
 
 // on Black and white we have to first do the proof, if needed because of the poor state
 // of non-modal dialogs (can't pass an object - CB - to the later functions)
 
 if (CB.needProof) {
     
-    // select all, copy
-    CB.swissKnife.selectAll();
-    CB.swissKnife.clipboardCopy();
-
-
     // select all and copy
     CB.swissKnife.selectAll();
     CB.swissKnife.clipboardCopy();
 
     // open the dollar proof template
     CB.swissKnife.openProofTemplateDollar();
-
     // paste in place
     CB.swissKnife.pasteInPlace();
     
-
     // move to proper position
     CB.swissKnife.moveQuarkBWOnDollarProof();
 

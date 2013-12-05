@@ -30,7 +30,7 @@ CB.swissKnife.selectDollarProofBorder = function() {
     this.selectRect(263.28, 489.36, 482.4, 30.24, "#Rlt");
 };
 
-// set the image to 300dpi since the color tiff printer is 600dpi
+// set the image to 300dpi since the bw tiff printer is now 600dpi
 CB.swissKnife.resizeToDPI(300);
 
 // on Black and white we have to first do the proof, if needed because of the poor state

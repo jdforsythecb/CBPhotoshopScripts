@@ -31,6 +31,12 @@ CB.JobSizes = {
     NUM10: 6
 };
 
+// an enum-like object listing the job color types
+CB.ColorTypes = {
+    FULLCOLOR: 0,
+    MONOCHROME: 1
+};
+
 // an enum-like object listing all formats a document could be in
 CB.Formats = {
     QUARKCOLORTIFFPRINTER: 0,

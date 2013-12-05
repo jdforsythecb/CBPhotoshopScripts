@@ -5,6 +5,12 @@
 //   message:   // nothing or the error message
 // }
 
+// quick whitespace (leading and trailing) trimmer
+// extends the standard String object (all strings have this method)
+String.prototype.trimmer = function() {
+    return this.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
+};
+
 copyTextToClipboard = function(text) {
     
     if (typeof text === 'undefined') {
@@ -17,22 +23,25 @@ copyTextToClipboard = function(text) {
 
     else {
         var folderForTempFile = Folder.temp.fsName;
-        
+/*        
         // create a new text file and put the text into it
         var clipTxtFile = new File(folderForTempFile + "/clipboard.txt");
         if (clipTxtFile.exists) clipTxtFile.remove();
         clipTxtFile.open('w');
         clipTxtFile.write(text);
         clipTxtFile.close();
-        
+*/
+
         // use clip.exe to copy the contents of the text file to the Windows clipboard
         var clipBatFile = new File(folderForTempFile + "/clipboard.bat")
         if (clipBatFile.exists) clipBatFile.remove();
         clipBatFile.open('w');
-        // tell clip to get the contents of the text file and put on the clipboard
-        clipBatFile.writeln("clip < " + clipTxtFile.fsName);
+//        // tell clip to get the contents of the text file and put on the clipboard
+//        clipBatFile.writeln("clip < " + clipTxtFile.fsName);
+        // tell clip to put the folder in the clipboard 
+        clipBatFile.writeln("echo " + text.trimmer() + "| clip");
         // make the batch file delete the text file and then itself
-        clipBatFile.writeln("del \"" + clipTxtFile.fsName + "\"");
+        //clipBatFile.writeln("del \"" + clipTxtFile.fsName + "\"");
         clipBatFile.writeln("del \"" + clipBatFile.fsName + "\"");
         clipBatFile.close();
         clipBatFile.execute();
