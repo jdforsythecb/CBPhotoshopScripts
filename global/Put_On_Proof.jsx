@@ -13,7 +13,7 @@ CB.swissKnife.pasteInPlace();
 
 // move on the PNG template as if it were face side, even if it is flap side
 // so flap shows up right on the proof sheet
-if (!CB.isMM) {
+if (CB.isQuark) {
     CB.swissKnife.moveQuarkColorFaceOnPNG();
     CB.swissKnife.clearQuarkFolderNumber();
 }

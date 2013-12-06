@@ -74,6 +74,9 @@ function doCopySettingColor() {
     
     CB.isFace = (CB.jobSide == CB.JobSides.FACE);
     CB.isFlap = !CB.isFace;
+    
+    CB.isQuark = (CB.fromProgram == CB.Programs.QUARK);
+    CB.isPageMaker = !CB.isQuark;
 
     // resize to 300dpi since the tiff printer is 600dpi
     CB.swissKnife.resizeToDPI(300);
@@ -95,11 +98,11 @@ function doCopySettingColor() {
     // for face side, move the layer into the proper position, and get rid of the folder number
     if (CB.isFace) {
         // move layer
-        CB.swissKnife.movePMColorFaceOnPNG();
+        if (CB.isQuark) CB.swissKnife.moveQuarkColorFaceOnPNG();
+        else CB.swissKnife.movePMColorFaceOnPNG();
         
         // janky way to get rid of folder number from Quark
-        if (!CB.isMM) CB.swissKnife.clearQuarkFolderNumber();
-    
+        if (CB.isQuark) CB.swissKnife.clearQuarkFolderNumber();
         // janky way to get rid of any extra pixels from PageMaker
         // selects a rectangle about halfway into the border and clears pixels around it
         else CB.swissKnife.clearPMFolderNumber();
@@ -109,7 +112,7 @@ function doCopySettingColor() {
     else if (CB.isFlap) {
         CB.swissKnife.rotateByDegrees(180);
         
-        if (!CB.isMM) CB.swissKnife.moveQuarkColorFlapOnPNG();
+        if (CB.isQuark) CB.swissKnife.moveQuarkColorFlapOnPNG();
         else CB.swissKnife.movePMColorFlapOnPNG();
         
         CB.swissKnife.flipFlapOnPNG();
@@ -151,6 +154,9 @@ function doCopySettingMonochrome() {
     CB.isFace = (CB.jobSide == CB.JobSides.FACE);
     CB.isFlap = !CB.isFace;
     
+    CB.isQuark = (CB.fromProgram == CB.Programs.QUARK);
+    CB.isPageMaker = !CB.isQuark;
+    
     // set the image to 300dpi since the bw tiff printer is now 600dpi
     CB.swissKnife.resizeToDPI(300);
 
@@ -164,7 +170,7 @@ function doCopySettingMonochrome() {
     // open Font Tools Template and paste into place, move and flatten
     CB.swissKnife.openFontToolsTemplate();
     CB.swissKnife.pasteInPlace();
-    if (!CB.isMM) CB.swissKnife.moveQuarkBWOnFontTools();
+    if (CB.isQuark) CB.swissKnife.moveQuarkBWOnFontTools();
     else CB.swissKnife.movePMBWOnFontTools();
     
     CB.swissKnife.flattenImage();
@@ -199,11 +205,10 @@ function doCopySettingMonochrome() {
                             CB.folder = \"" + CB.folder + "\"; \
                             CB.fontCode = \"" + CB.fontCode + "\"; \
                             CB.isFlap = " + CB.isFlap + "; \
-                            CB.needProof = " + CB.needProof + ";";
-        if (!CB.isMM) func += "#include \"/g/jdforsythe/Settings/Photoshop Scripts/QuarkBW_after_dialog.jsx\";";
-        else func += "#include \"/g/jdforsythe/Settings/Photoshop Scripts/PMBW_after_dialogMM.jsx\";";
-        func += "}; \
-                 w.show();";
+                            #include \"/g/jdforsythe/Settings/Photoshop Scripts/global/BW_After_Marquee.jsx\"; \
+                        }; \
+                        w.center(); \
+                        w.show();";
         bt.body = func;
         bt.send();
 
@@ -254,6 +259,19 @@ sText = win.add( "statictext", [5,115,75,135], 'Need:' );
 needsProof = win.add( "checkbox", [5,145,205,165], 'Proof Page' );
 goButton = win.add( "button", [5,185,200,215], 'GO!' );
 win.center();
+
+// default to Quark for Church Budget, PageMaker for Monthly Mail
+if (!CB.isMM) fromProgram1.value = true;
+else fromProgram2.value = true;
+
+// default to Monochrome for everyone
+colorType2.value = true;
+
+// default to face side for everyone
+jobSide1.value = true;
+
+// for Church Budget, default to needing a proof
+if (!CB.isMM) needsProof.value = true;
 
 
 // set the values when the button is clicked
@@ -306,11 +324,22 @@ if ( (fromProgram1.value || fromProgram2.value) && (colorType1.value || colorTyp
             // face side or flap side is already set in the button press listener above
             // both kinds of job use the same function which will check CB.jobSide for differences
             doCopySettingColor();
+            
+            // if we need a proof, print one
+            if (CB.needProof) {
+                #include "/g/jdforsythe/Settings/Photoshop Scripts/global/Put_On_Proof.jsx"
+            }
         }
 
         // Monochrome (go to PNG Font AND Font Tools)
         else if (CB.colorType == CB.ColorTypes.MONOCHROME) {
             doCopySettingColor();
+            
+            // if we need a proof, print one (before doing monochrome because of the continue)
+            if (CB.needProof) {
+                #include "/g/jdforsythe/Settings/Photoshop Scripts/global/Put_On_Proof.jsx"
+            }
+        
             doCopySettingMonochrome();
         }
             
@@ -322,21 +351,27 @@ if ( (fromProgram1.value || fromProgram2.value) && (colorType1.value || colorTyp
         // going to PNG Font
         if (CB.colorType == CB.ColorTypes.FULLCOLOR) {
             doCopySettingColor();
+            
+            // if we need a proof, print one
+            if (CB.needProof) {
+                #include "/g/jdforsythe/Settings/Photoshop Scripts/global/Put_On_Proof.jsx"
+            }
         }
 
         // going to Font Tools
         else if (CB.colorType == CB.ColorTypes.MONOCHROME) {
             doCopySettingColor();
+            
+            // if we need a proof, print one
+            if (CB.needProof) {
+                #include "/g/jdforsythe/Settings/Photoshop Scripts/global/Put_On_Proof.jsx"
+            }
+        
             doCopySettingMonochrome();
         }
 
     }
 
-
-    // if we have items chosen and we need a proof, print one
-    if (CB.needProof) {
-        #include "/g/jdforsythe/Settings/Photoshop Scripts/global/Put_On_Proof.jsx"
-    }
 }
 
 // else do nothing because they didn't choose anything...
