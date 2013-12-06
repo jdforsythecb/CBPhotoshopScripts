@@ -193,7 +193,8 @@ function doCopySettingMonochrome() {
         bt.target = "photoshop";
         func = "var w = new Window('palette', '" + title + "', [0, 0, 400, 100]); \
                         w.add('statictext', [5,5,390,50], '" + message + "'); \
-                        okButton = w.add('button', [5,40,205,90], 'GO!'); \
+                        okButton = w.add('button', [5,40,205,90], 'GO!', {name: 'ok'}); \
+                        okButton.active = true; \
                         w.center(); \
                         okButton.onClick = function() { \
                             w.close(); \
@@ -208,7 +209,10 @@ function doCopySettingMonochrome() {
                             #include \"/g/jdforsythe/Settings/Photoshop Scripts/global/BW_After_Marquee.jsx\"; \
                         }; \
                         w.center(); \
-                        w.show();";
+                        w.show(); \
+                        $.sleep(100); \
+                        w.active = true; \
+                        okButton.active = true;";
         bt.body = func;
         bt.send();
 
@@ -257,7 +261,11 @@ jobSide1 = win.add( "radiobutton", [400,40,600,60], 'Face' );
 jobSide2 = win.add( "radiobutton", [400,65,600,85], 'Flap' );
 sText = win.add( "statictext", [5,115,75,135], 'Need:' );
 needsProof = win.add( "checkbox", [5,145,205,165], 'Proof Page' );
-goButton = win.add( "button", [5,185,200,215], 'GO!' );
+// naming the button "ok" makes it accept the enter key (even when it doesn't have focus)
+goButton = win.add( "button", [5,185,200,215], 'GO!', {name: "ok"});
+// making the button "active" gives it focus (although without naming it "ok"
+// it can lose focus, also it only accepts space bar without the name
+goButton.active = true;
 win.center();
 
 // default to Quark for Church Budget, PageMaker for Monthly Mail

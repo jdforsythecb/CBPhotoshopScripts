@@ -36,6 +36,7 @@ CB.swissKnife.selectNone();
 CB.swissKnife.convertToGrayscale();
 CB.swissKnife.convertToBitmapDiffusion();
 
+/*
 // copy the sanitized folder number to the clipboard (folder is passed in from previous script, PMBWMM.jsx)
 
 // include the library to copy text to the clipboard
@@ -58,6 +59,9 @@ message = "When Font Tools opens, press \"New Font\" and CTRL+V to paste in the 
 
 CB.swissKnife.informationDialog(message);
 
+*/
+// open font tools
+#include "/g/jdforsythe/Settings/Photoshop Scripts/Open_Font_Tools.jsx"
 
 // select all, copy, and open font tools for updating/inserting
 CB.swissKnife.selectAll();

@@ -517,7 +517,7 @@ ChurchBudgetSwissKnife.prototype.moveQuarkBWOnDollarProof = function() {
 // PageMaker + Color TIFF Printer (ImagePrinter Pro) + Face Side >> PNG Font Template
 ChurchBudgetSwissKnife.prototype.movePMColorFaceOnPNG = function() {
     // x=-1px, y=-286px
-    translation = this.getTranslateValues(300, -1, -286, "px");
+    translation = this.getTranslateValues(300, -1, -300, "px");
     this.moveActiveLayer(translation.tUnit, translation.xMovement, translation.yMovement);
 };
 
