@@ -524,7 +524,7 @@ ChurchBudgetSwissKnife.prototype.movePMColorFaceOnPNG = function() {
 // PageMaker + Color TIFF Printer (ImagePrinter Pro) + Flap Side >> PNG Font Template
 ChurchBudgetSwissKnife.prototype.movePMColorFlapOnPNG = function() {
     // x=0px, y=630px
-    translation = this.getTranslateValues(300, 0, 630, "px");
+    translation = this.getTranslateValues(300, 0, 615, "px");
     this.moveActiveLayer(translation.tUnit, translation.xMovement, translation.yMovement);
 };
 
@@ -550,7 +550,8 @@ ChurchBudgetSwissKnife.prototype.movePMBWOnDollarProof = function() {
 // PNG Font Template - flip the flap to the top for flap side jobs
 ChurchBudgetSwissKnife.prototype.flipFlapOnPNG = function() {
     // select the flap area at the bottom of the template, cut and paste again (in place) as a new layer
-    this.selectRect(1868, 2148, 2072, 177, "#Pxl");
+    //this.selectRect(1868, 2148, 2072, 177, "#Pxl");
+    this.selectFlap();
     this.clipboardCut();
     this.pasteInPlace();
         // translation for moving the flap (x=0, y=-1862px)
@@ -574,6 +575,19 @@ ChurchBudgetSwissKnife.prototype.selectDollarProofBorder = function() {
 };
 
 
+ChurchBudgetSwissKnife.prototype.selectFlap = function() {
+    var actDesc = new ActionDescriptor();
+    var actRef = new ActionReference();
+    actRef.putProperty( cTID("Chnl"), cTID("fsel") );
+    actDesc.putReference( cTID("null"), actRef );
+    
+    var actRef2 = new ActionReference();
+    actRef2.putName( cTID( "Path" ), "flap" );
+    actDesc.putReference( cTID( "T   " ), actRef2 );
+    actDesc.putInteger( cTID("Vrsn"), 1 );
+    actDesc.putBoolean( sTID( "vectorMaskParams" ), true );
+    executeAction( cTID("setd"), actDesc, DialogModes.NO );
+};
 
 
 
