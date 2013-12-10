@@ -4,6 +4,9 @@
 // top-most script in the Copy setting hierarchy - creates the global object
 // and initializes with the needed properties
 
+// if we've hard-coded this as a monthly mail computer running it
+if (typeof hardCodedMM === 'undefined') hardCodedMM = false;
+
 // create the universal global object if it doesn't exist
 var CB = CB || {};
 
@@ -227,14 +230,23 @@ function doCopySettingMonochrome() {
 /*********************************************************************************** MAIN EXECUTION CONTINUES
     *************************************************************************************************************/
 
+// if this is hard-coded monthly mail, use 0000
+// otherwise use A-0101 for the default folder code3
+if (!hardCodedMM) {
+    defaultFolder = "A-0101";
+}
+else {
+    defaultFolder = "0000";
+}
 
+
+// get the folder number from user input
+userInputFolder = prompt ("Enter the folder number", defaultFolder, "Enter the folder number");
+// get the font code from user input
+CB.fontCode = prompt ("Enter the font code", "A", "Enter the font code");
 
 // include the library of utils for user-inputted folder number strings
 #include '/g/jdforsythe/Settings/Photoshop Scripts/lib/folderNumberStringUtils.jsx'
-// get the folder number from user input
-userInputFolder = prompt ("Enter the folder number", "A-0101", "Enter the folder number");
-// get the font code from user input
-CB.fontCode = prompt ("Enter the font code", "A", "Enter the font code");
 
 // create an instance of the folderNumberStringUtils object with the user-inputted folder string
 FolderUtils = new folderNumberStringUtils(userInputFolder);

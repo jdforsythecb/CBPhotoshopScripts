@@ -13,6 +13,9 @@ CB.bgLayer = CB.mainDoc.layers.getByName("WhiteBG");
 // font code layer
 CB.fontCodeLayer = CB.mainDoc.layers.getByName("FONTCODE");
 
+// filename layer
+CB.fileNameLayer = CB.mainDoc.layers.getByName("FILENAME");
+
 // flap layer
 CB.flapLayer = CB.mainDoc.layers.getByName("Flap");
 
@@ -73,6 +76,9 @@ if( BridgeTalk.appName == "photoshop" ) {
 
     // set the text of the font code text layer (CB.folder should have been set by calling script)
     CB.fontCodeLayer.textItem.contents = CB.folder + " " + CB.fontCode;
+    
+    // set the text of the filename text layer
+    CB.fileNameLayer.textItem.contents = CB.fontCodeLayer.textItem.contents + "_PROOF.PDF"
     
 /*    
     // if it begins with a P and the next character is not a dash, it's premier
