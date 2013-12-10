@@ -115,10 +115,14 @@ function doCopySettingColor() {
     else if (CB.isFlap) {
         CB.swissKnife.rotateByDegrees(180);
         
-        if (CB.isQuark) CB.swissKnife.moveQuarkColorFlapOnPNG();
-        else CB.swissKnife.movePMColorFlapOnPNG();
-        
-        CB.swissKnife.flipFlapOnPNG();
+        if (CB.isQuark) {
+            CB.swissKnife.moveQuarkColorFlapOnPNG();
+            CB.swissKnife.flipFlapOnPNGCB();
+        }
+        else {
+            CB.swissKnife.movePMColorFlapOnPNG();
+            CB.swissKnife.flipFlapOnPNGMM();
+        }
     }
 
 
