@@ -182,52 +182,59 @@ function doCopySettingMonochrome() {
     
     CB.swissKnife.flattenImage();
     
-    // this is the only way to pause the script (seemingly, anyway) and
-    // continue after the user does something
-    // we show a palette window by sending a message through bridgeTalk
-    // the palette doesn't steal focus, but it also lets this script
-    // continue executing (and there's no way to wait for it because
-    // a loop will stop PS from responding to the user)
-    // so we show this dialog and in the button click callback we load
-    // the part 2 to this script and continue executing
+    // if we don't have an image, we don't need to protect the image so just move on
+    if (!CB.hasImage) {
+        #include "/g/jdforsythe/Settings/Photoshop Scripts/global/BW_After_Marquee.jsx";
+    }
 
-    // this dialog is to allow the user to select any images to protect from
-    // the accented edges tool we're about to use, then continue execution
+    else {    
+        // this is the only way to pause the script (seemingly, anyway) and
+        // continue after the user does something
+        // we show a palette window by sending a message through bridgeTalk
+        // the palette doesn't steal focus, but it also lets this script
+        // continue executing (and there's no way to wait for it because
+        // a loop will stop PS from responding to the user)
+        // so we show this dialog and in the button click callback we load
+        // the part 2 to this script and continue executing
 
-    var title = "Select image";
-    var message = "Select image to protect with marquee tool, then click continue...";
-    var bt = new BridgeTalk();
-        bt.target = "photoshop";
-        func = "var w = new Window('palette', '" + title + "', [0, 0, 400, 100]); \
-                        w.add('statictext', [5,5,390,50], '" + message + "'); \
-                        okButton = w.add('button', [5,40,205,90], 'GO!', {name: 'ok'}); \
-                        okButton.active = true; \
-                        w.center(); \
-                        okButton.onClick = function() { \
-                            w.close(); \
-                            var CB = {}; \
-                            CB.isMM = " + CB.isMM + "; \
-                            CB.isCB = " + CB.isCB + "; \
-                            CB.isMcDaniel = " + CB.isMcDaniel + "; \
-                            CB.isUnited = " + CB.isUnited + "; \
-                            CB.folder = \"" + CB.folder + "\"; \
-                            CB.fontCode = \"" + CB.fontCode + "\"; \
-                            CB.isFlap = " + CB.isFlap + "; \
-                            #include \"/g/jdforsythe/Settings/Photoshop Scripts/global/BW_After_Marquee.jsx\"; \
-                        }; \
-                        w.center(); \
-                        w.show(); \
-                        $.sleep(100); \
-                        w.active = true; \
-                        okButton.active = true;";
-        bt.body = func;
-        bt.send();
+        // this dialog is to allow the user to select any images to protect from
+        // the accented edges tool we're about to use, then continue execution
 
-    // execution will continue after the pallete window is displayed
-    // so we must do nothing here and only when the user clicks the continue button
-    // in the palette window above, load another script to continue the execution of Quark BW images
+        var title = "Select image";
+        var message = "Select image to protect with marquee tool, then click continue...";
+        var bt = new BridgeTalk();
+            bt.target = "photoshop";
+            func = "var w = new Window('palette', '" + title + "', [0, 0, 400, 100]); \
+                            w.add('statictext', [5,5,390,50], '" + message + "'); \
+                            okButton = w.add('button', [5,40,205,90], 'GO!', {name: 'ok'}); \
+                            okButton.active = true; \
+                            w.center(); \
+                            okButton.onClick = function() { \
+                                w.close(); \
+                                var CB = {}; \
+                                CB.isMM = " + CB.isMM + "; \
+                                CB.isCB = " + CB.isCB + "; \
+                                CB.isMcDaniel = " + CB.isMcDaniel + "; \
+                                CB.isUnited = " + CB.isUnited + "; \
+                                CB.folder = \"" + CB.folder + "\"; \
+                                CB.fontCode = \"" + CB.fontCode + "\"; \
+                                CB.isFlap = " + CB.isFlap + "; \
+                                CB.hasImage = " + CB.hasImage + "; \
+                                #include \"/g/jdforsythe/Settings/Photoshop Scripts/global/BW_After_Marquee.jsx\"; \
+                            }; \
+                            w.center(); \
+                            w.show(); \
+                            $.sleep(100); \
+                            w.active = true; \
+                            okButton.active = true;";
+            bt.body = func;
+            bt.send();
+
+        // execution will continue after the pallete window is displayed
+        // so we must do nothing here and only when the user clicks the continue button
+        // in the palette window above, load another script to continue the execution of Quark BW images
     
-
+    }
 
 
 }
@@ -238,16 +245,18 @@ function doCopySettingMonochrome() {
 // otherwise use A-0101 for the default folder code3
 if (!hardCodedMM) {
     defaultFolder = "A-0101";
+    defaultFont = "A";
 }
 else {
     defaultFolder = "0000";
+    defaultFont = "W";
 }
 
 
 // get the folder number from user input
 userInputFolder = prompt ("Enter the folder number", defaultFolder, "Enter the folder number");
 // get the font code from user input
-CB.fontCode = prompt ("Enter the font code", "A", "Enter the font code");
+CB.fontCode = prompt ("Enter the font code", defaultFont, "Enter the font code");
 
 // include the library of utils for user-inputted folder number strings
 #include '/g/jdforsythe/Settings/Photoshop Scripts/lib/folderNumberStringUtils.jsx'
@@ -266,36 +275,52 @@ CB.folder = FolderUtils.folder;
 
 // create a dialog box to ask what the user wants to do
 var win = new Window("dialog", undefined, [0,0,605,220], );
+
 sText = win.add( "statictext", [5,5,75,25], 'From:' );
 fromProgram1 = win.add( "radiobutton", [5,35,205,55], 'QuarkXPress');
 fromProgram2 = win.add( "radiobutton", [5,60,205,80], 'PageMaker 6.5');
+
 sText = win.add( "statictext", [200,5,270,25], 'Type:' );
 colorType1 = win.add( "radiobutton", [200,35,400,55], 'Full Color' );
 colorType2 = win.add( "radiobutton", [200,60,400,80], 'Monochrome' );
+
 sText = win.add( "statictext", [400,5,470,25], 'Side:' );
 jobSide1 = win.add( "radiobutton", [400,40,600,60], 'Face' );
 jobSide2 = win.add( "radiobutton", [400,65,600,85], 'Flap' );
+
 sText = win.add( "statictext", [5,115,75,135], 'Need:' );
 needsProof = win.add( "checkbox", [5,145,205,165], 'Proof Page' );
+
+win.add("statictext", [400,115,470,135], 'Design:');
+hasImage1 = win.add("radiobutton", [400,150,600,170], 'Has an image');
+hasImage2 = win.add("radiobutton", [400,175,600,195], 'Is text only');
+
 // naming the button "ok" makes it accept the enter key (even when it doesn't have focus)
 goButton = win.add( "button", [5,185,200,215], 'GO!', {name: "ok"});
 // making the button "active" gives it focus (although without naming it "ok"
-// it can lose focus, also it only accepts space bar without the name
+// it can lose focus) also it only accepts space bar without the name
 goButton.active = true;
 win.center();
 
 // default to Quark for Church Budget, PageMaker for Monthly Mail
 if (!CB.isMM) fromProgram1.value = true;
-else fromProgram2.value = true;
+else fromProgram1.value = false;
+fromProgram2 = !fromProgram1;
 
 // default to Monochrome for everyone
+colorType1.value = false;
 colorType2.value = true;
 
 // default to face side for everyone
 jobSide1.value = true;
+jobSide2.value = false;
 
 // for Church Budget, default to needing a proof
 if (!CB.isMM) needsProof.value = true;
+
+// default to having an image for everyone
+hasImage1.value = true;
+hasImage2.value = false;
 
 
 // set the values when the button is clicked
@@ -313,8 +338,9 @@ goButton.onClick = function() {
                                             if (jobSide1.value == true) CB.jobSide = CB.JobSides.FACE;
                                             if (jobSide2.value == true) CB.jobSide = CB.JobSides.FLAP;
                                                                                 
-                                            if (needsProof.value == true) CB.needProof = true;
-                                            else CB.needProof = false;
+                                            CB.needProof = needsProof.value;
+                                                                                        
+                                            CB.hasImage = hasImage1.value;
                                             
                                             win.close();
                                     }
@@ -332,7 +358,6 @@ goButton.onClick = function() {
                                         }
                                     }
 }
-
 
 win.show();
 

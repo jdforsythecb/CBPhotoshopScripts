@@ -5,7 +5,7 @@ ChurchBudgetSwissKnife = function() {
     TEMPLATEBASEPATH = "/g/jdforsythe/Templates/Photoshop/";
     CLIPBOARDPNGPATH = "/c/eps/dump/clipboard.png";
     
-    PNGTEMPLATE = "Full Color Template.tif";
+    PNGTEMPLATE = "PNG Template.tif";
     FNTTOOLSTEMPLATE = "Font Tools Template.psd";
     
     PROOFTEMPLATEBOOKLETCOVER = "Proof Template Book Cover.psd";
@@ -363,26 +363,38 @@ ChurchBudgetSwissKnife.prototype.convertToGrayscale = function() {
     this.Document().changeMode(ChangeMode.GRAYSCALE);
 };
 
-// Bitmap with Diffusion dither
-ChurchBudgetSwissKnife.prototype.convertToBitmapDiffusion = function() {
-    // dpi = 299.998992919922 for font tools
-    dpi = 299.998992919922;
-    
-    /*
-    var actDesc1 = new ActionDescriptor();
-    var actDesc2 = new ActionDescriptor();
-    actDesc2.putUnitDouble(cTID('Rslt'), cTID('#Rsl'), dpi);
-    actDesc2.putEnumerated(cTID('Mthd'), cTID('Mthd'), cTID('DfnD'));
-    actDesc1.putObject(cTID('T   '), cTID('BtmM'), actDesc2);
-    executeAction(sTID('convertMode'), actDesc1, DialogModes.NO);
-    */
-
+// convert to bitmap, generic
+ChurchBudgetSwissKnife.prototype.convertToBitmap = function(dpi, method) {
+    switch (method) {
+        case "diffusion":
+            method = BitmapConversionType.DIFFUSIONDITHER;
+            alert("setting to diffusion");
+            break;
+        case "threshold":
+            method = BitmapConversionType.HALFTHRESHOLD;
+            alert("setting to threshold");
+            break;
+    }
     bitmapSaveOptions = new BitmapConversionOptions();
-    bitmapSaveOptions.method = BitmapConversionType.DIFFUSIONDITHER;
+    bitmapSaveOptions.method = method;
     bitmapSaveOptions.resolution = dpi;
     this.Document().changeMode(ChangeMode.BITMAP, bitmapSaveOptions);
 };
 
+// Bitmap with Diffusion dither
+ChurchBudgetSwissKnife.prototype.convertToBitmapDiffusion = function() {
+    // dpi = 299.998992919922 for font tools
+    dpi = 299.998992919922;
+    method = "diffusion";
+    this.convertToBitmap(dpi, method);
+};
+
+// bitmap with 50% threshold
+ChurchBudgetSwissKnife.prototype.convertToBitmapThreshold = function() {
+    dpi = 299.998992919922;
+    method = "threshold";
+    this.convertToBitmap(dpi, method);
+};
 
 // Fill with white
 ChurchBudgetSwissKnife.prototype.fillWithWhite = function() {

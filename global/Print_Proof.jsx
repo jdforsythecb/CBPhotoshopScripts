@@ -56,6 +56,7 @@ if (!CB.isMM) {
     docRef.layerSets.getByName("Proof").visible = false;
     docRef.layerSets.getByName("DateNumbers").visible = false;
     docRef.layers.getByName("Flap").visible = false;
+    docRef.layers.getByName("FILENAME").visible = false;
 
     // print one copy
     docRef.printSettings.flip = false;

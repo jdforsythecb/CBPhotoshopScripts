@@ -9,6 +9,7 @@ CB.isUnited
 CB.folder
 CB.fontCode
 CB.isFlap
+CB.hasImage
 */
 
 /* debugging 
@@ -20,21 +21,28 @@ CB.isUnited = false;
 CB.folder = "A0101";
 CB.fontCode = "A";
 CB.isFlap = false;
+CB.hasImage = true;
  */
 
 // we need a swiss knife instance
 #include "/g/jdforsythe/Settings/Photoshop Scripts/lib/ChurchBudgetSwissKnife.jsx"
 CB.swissKnife = new ChurchBudgetSwissKnife();
 
-// there should be a marquee around what the user wants to protect
-// invert selection and run accented edges
-CB.swissKnife.invertSelection();
-CB.swissKnife.accentedEdges();
-CB.swissKnife.selectNone();
+if (CB.hasImage) {
+    // there should be a marquee around what the user wants to protect
+    // invert selection and run accented edges
+    CB.swissKnife.invertSelection();
+    CB.swissKnife.accentedEdges();
+    CB.swissKnife.selectNone();
+}
 
 // convert to grayscale, then bitmap with diffusion dither
 CB.swissKnife.convertToGrayscale();
-CB.swissKnife.convertToBitmapDiffusion();
+
+// if it has an image, do diffusion dither bitmap
+if (CB.hasImage) CB.swissKnife.convertToBitmapDiffusion();
+// if it is text only, do 50% threshold bitmap
+else CB.swissKnife.convertToBitmapThreshold();
 
 /*
 // copy the sanitized folder number to the clipboard (folder is passed in from previous script, PMBWMM.jsx)
