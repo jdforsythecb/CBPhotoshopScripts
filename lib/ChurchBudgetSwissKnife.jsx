@@ -368,11 +368,9 @@ ChurchBudgetSwissKnife.prototype.convertToBitmap = function(dpi, method) {
     switch (method) {
         case "diffusion":
             method = BitmapConversionType.DIFFUSIONDITHER;
-            alert("setting to diffusion");
             break;
         case "threshold":
             method = BitmapConversionType.HALFTHRESHOLD;
-            alert("setting to threshold");
             break;
     }
     bitmapSaveOptions = new BitmapConversionOptions();
