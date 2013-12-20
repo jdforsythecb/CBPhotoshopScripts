@@ -138,15 +138,24 @@ function doCopySettingColor() {
     }
 
 
+    // create command-line arguments for PNG Font
+    var PNGFontArgs = {}
+    PNGFontArgs.folder = CB.folder.toUpperCase();
+    if (CB.isMM) PNGFontArgs.jobType = 'DoubleWide_MM';
+    else PNGFontArgs.jobType = 'DoubleWide_CB';    
+
     // open PNG Font
-    // need command-line arguments here!!!
     #include "/g/jdforsythe/Settings/Photoshop Scripts/Open_PNG_Font.jsx"
 
-    message = "When PNG Font opens, press CTRL+V to paste in the folder number.\n \
-               \"Load from clipboard\" and create or overwrite font code \"" + CB.fontCode + "\" \n\n \
+    
+    // we no longer need this dialog. nothing will save over top clipboard.png
+    // however certain functions, like Paste In Place will fail if Photoshop
+    // doesn't have focus, so we need to keep the script paused until the user returns
+    message = "When PNG Font opens, \"Load from clipboard\" and create or overwrite font code \"" + CB.fontCode + "\" \n\n \
                Then come back and press \"Ok\"";
 
     CB.swissKnife.informationDialog(message);
+    
     
     // we're done with the PNG Template, so close it, leaving the original document open
     CB.swissKnife.closeWithoutSaving();
