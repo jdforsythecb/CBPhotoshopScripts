@@ -314,7 +314,8 @@ win.center();
 // default to Quark for Church Budget, PageMaker for Monthly Mail
 if (!CB.isMM) fromProgram1.value = true;
 else fromProgram1.value = false;
-fromProgram2 = !fromProgram1;
+fromProgram2.value = !fromProgram1.value;
+
 
 // default to Monochrome for everyone
 colorType1.value = false;
@@ -339,13 +340,13 @@ goButton.onClick = function() {
                                          (colorType1.value || colorType2.value) &&
                                          (jobSide1.value || jobSide2.value) ) {
                                             if (fromProgram1.value == true) CB.fromProgram = CB.Programs.QUARK;
-                                            if (fromProgram2.value == true) CB.fromProgram = CB.Programs.PAGEMAKER;
+                                            else CB.fromProgram = CB.Programs.PAGEMAKER;
                                             
                                             if (colorType1.value == true) CB.colorType = CB.ColorTypes.FULLCOLOR;
-                                            if (colorType2.value == true) CB.colorType = CB.ColorTypes.MONOCHROME;
+                                            else CB.colorType = CB.ColorTypes.MONOCHROME;
                                             
                                             if (jobSide1.value == true) CB.jobSide = CB.JobSides.FACE;
-                                            if (jobSide2.value == true) CB.jobSide = CB.JobSides.FLAP;
+                                            else CB.jobSide = CB.JobSides.FLAP;
                                                                                 
                                             CB.needProof = needsProof.value;
                                                                                         
