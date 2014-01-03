@@ -68,6 +68,10 @@ message = "When Font Tools opens, press \"New Font\" and CTRL+V to paste in the 
 CB.swissKnife.informationDialog(message);
 
 */
+
+// create the argument object for FontTools
+FontToolsArgs = { folder: CB.folder };
+
 // open font tools
 #include "/g/jdforsythe/Settings/Photoshop Scripts/Open_Font_Tools.jsx"
 
