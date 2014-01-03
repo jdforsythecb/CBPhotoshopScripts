@@ -8,6 +8,8 @@ ChurchBudgetSwissKnife = function() {
     PNGTEMPLATE = "PNG Template.tif";
     FNTTOOLSTEMPLATE = "Font Tools Template.psd";
     
+    STRIPINTEMPLATE = "Dollar Addressed Stripins.psd";
+    
     PROOFTEMPLATEBOOKLETCOVER = "Proof Template Book Cover.psd";
     PROOFTEMPLATEBOOKLET = "Proof Template Booklet.psd";
     PROOFTEMPLATECARTON = "Proof Template Carton.psd";
@@ -209,6 +211,10 @@ ChurchBudgetSwissKnife.prototype.openPNGTemplate = function() {
 
 ChurchBudgetSwissKnife.prototype.openFontToolsTemplate = function() {
     this.openDocument(TEMPLATEBASEPATH + FNTTOOLSTEMPLATE);
+};
+
+ChurchBudgetSwissKnife.prototype.openStripinTemplate = function() {
+    this.openDocument(TEMPLATEBASEPATH + STRIPINTEMPLATE);
 };
 
 // proof templates
