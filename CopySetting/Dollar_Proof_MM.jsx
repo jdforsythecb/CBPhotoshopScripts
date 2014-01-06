@@ -53,7 +53,7 @@ if( BridgeTalk.appName == "photoshop" ) {
 
 
     // set the text of the font code text layer (CB.folder should have been set by calling script)
-    CB.fontCodeLayer.textItem.contents = "MM" + CB.folder + CB.fontCode + "_PROOF.PDF";
+    CB.fontCodeLayer.textItem.contents = "MM" + CB.folder + CB.fontCode.toUpperCase() + "_PROOF.PDF";
 
 
 

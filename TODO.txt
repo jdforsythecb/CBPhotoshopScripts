@@ -1,0 +1,5 @@
+TODO:
+
+- Need to make some sort of settings for PNGFont and FontTools locations. They're hard-coded in the global scripts right now.
+
+- Add other product types, i.e. booklet, mailback, premier, etc

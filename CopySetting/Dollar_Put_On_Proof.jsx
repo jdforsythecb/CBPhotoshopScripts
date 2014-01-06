@@ -42,15 +42,15 @@ CB.swissKnife.selectNone();
 
 // now run the proper proofing script for getting date/number/addressing/advertising
 if (!CB.isMM) {
-    #include "/g/jdforsythe/Settings/Photoshop Scripts/Dollar_Proof_CB.jsx";
+    #include "/g/jdforsythe/Settings/Photoshop Scripts/CopySetting/Dollar_Proof_CB.jsx";
 }
 
 else {
-    #include "/g/jdforsythe/Settings/Photoshop Scripts/Dollar_Proof_MM.jsx";
+    #include "/g/jdforsythe/Settings/Photoshop Scripts/CopySetting/Dollar_Proof_MM.jsx";
 }
 
 // print proofs
-#include "/g/jdforsythe/Settings/Photoshop Scripts/global/Print_Proof.jsx";
+#include "/g/jdforsythe/Settings/Photoshop Scripts/CopySetting/Dollar_Print_Proof.jsx";
 
 // close the proof document
 CB.swissKnife.closeWithoutSaving();

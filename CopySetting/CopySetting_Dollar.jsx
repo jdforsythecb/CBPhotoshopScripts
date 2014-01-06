@@ -130,14 +130,6 @@ function doCopySettingColor() {
     CB.swissKnife.flattenImage();
     CB.swissKnife.saveToClipboardPNG();
     
-    // copy the folder number to the clipboard
-    #include "/g/jdforsythe/Settings/Photoshop Scripts/lib/copyTextToClipboard.jsx"
-    clip = copyTextToClipboard(CB.folder);
-    if (clip.status == 1) {
-        CB.swissKnife.informationDialog("Warning: Failed to copy the folder number to the clipboard! Error: " + clip.message);
-    }
-
-
     // create command-line arguments for PNG Font
     var PNGFontArgs = {}
     PNGFontArgs.folder = CB.folder.toUpperCase();
@@ -193,7 +185,7 @@ function doCopySettingMonochrome() {
     
     // if we don't have an image, we don't need to protect the image so just move on
     if (!CB.hasImage) {
-        #include "/g/jdforsythe/Settings/Photoshop Scripts/global/BW_After_Marquee.jsx";
+        #include "/g/jdforsythe/Settings/Photoshop Scripts/CopySetting/Dollar_BW_After_Marquee.jsx";
     }
 
     else {    
@@ -226,6 +218,7 @@ function doCopySettingMonochrome() {
                                 CB.isMcDaniel = " + CB.isMcDaniel + "; \
                                 CB.isUnited = " + CB.isUnited + "; \
                                 CB.folder = \"" + CB.folder + "\"; \
+                                CB.prettyFolder = \"" + CB.prettyFolder + "\"; \
                                 CB.fontCode = \"" + CB.fontCode + "\"; \
                                 CB.isFlap = " + CB.isFlap + "; \
                                 CB.hasImage = " + CB.hasImage + "; \
@@ -281,6 +274,7 @@ CB.isUnited = FolderUtils.isUN;
 
 // copy the sanitized folder number to the clipboard
 CB.folder = FolderUtils.folder;
+CB.prettyFolder = FolderUtils.prettyFolder;
 
 // create a dialog box to ask what the user wants to do
 var win = new Window("dialog", undefined, [0,0,605,220], );
@@ -386,7 +380,7 @@ if ( (fromProgram1.value || fromProgram2.value) && (colorType1.value || colorTyp
             
             // if we need a proof, print one
             if (CB.needProof) {
-                #include "/g/jdforsythe/Settings/Photoshop Scripts/global/Put_On_Proof.jsx"
+                #include "/g/jdforsythe/Settings/Photoshop Scripts/CopySetting/Dollar_Put_On_Proof.jsx"
             }
         }
 
@@ -396,7 +390,7 @@ if ( (fromProgram1.value || fromProgram2.value) && (colorType1.value || colorTyp
             
             // if we need a proof, print one (before doing monochrome because of the continue)
             if (CB.needProof) {
-                #include "/g/jdforsythe/Settings/Photoshop Scripts/global/Put_On_Proof.jsx"
+                #include "/g/jdforsythe/Settings/Photoshop Scripts/CopySetting/Dollar_Put_On_Proof.jsx"
             }
         
             doCopySettingMonochrome();
@@ -413,7 +407,7 @@ if ( (fromProgram1.value || fromProgram2.value) && (colorType1.value || colorTyp
             
             // if we need a proof, print one
             if (CB.needProof) {
-                #include "/g/jdforsythe/Settings/Photoshop Scripts/global/Put_On_Proof.jsx"
+                #include "/g/jdforsythe/Settings/Photoshop Scripts/CopySetting/Dollar_Put_On_Proof.jsx"
             }
         }
 
@@ -423,7 +417,7 @@ if ( (fromProgram1.value || fromProgram2.value) && (colorType1.value || colorTyp
             
             // if we need a proof, print one
             if (CB.needProof) {
-                #include "/g/jdforsythe/Settings/Photoshop Scripts/global/Put_On_Proof.jsx"
+                #include "/g/jdforsythe/Settings/Photoshop Scripts/CopySetting/Dollar_Put_On_Proof.jsx"
             }
         
             doCopySettingMonochrome();

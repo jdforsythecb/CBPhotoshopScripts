@@ -12,7 +12,6 @@
 // myObj = myFolder.decipherString();
 // myObj { status: 0/1 (ok/fail), folder: properFolderNumberString, message: error message, if any }
 
-
 folderNumberStringUtils = function(input) {
     
     // what folder number string
@@ -23,6 +22,8 @@ folderNumberStringUtils = function(input) {
     
     // sanitized folder number
     this.folder = "";
+    // prettified folder number
+    this.prettyFolder = "";
     
     // booleans
     this.isMM = false;
@@ -160,6 +161,21 @@ folderNumberStringUtils = function(input) {
         return input.replace ("-", "");
     }
 
+    this.makePrettyFolder = function() {
+        // this.folder has already been sanitized and we know it's valid otherwise this wouldn't get executed
+        // monthly mail gets no dash, CB gets a dash after the letter, McD and United get a dash after the first two numbers
+        if (this.isMM) return this.folder;
+        else if (this.isCB) {
+            // insert a - at position 1 (after the letter)
+            return (this.folder.substr(0,1) + "-" + this.folder.substr(1));
+        }
+        else {
+            // this is McDaniel or United, so insert the - at position 2 (after the first two numbers)
+            return (this.folder.substr(0,2) + "-" + this.folder.substr(2));
+        }        
+    }
+        
+
     // go ahead and do all the computation upon instantiation
     this.setCurrentCompany();
     result = this.decipherString();
@@ -168,7 +184,7 @@ folderNumberStringUtils = function(input) {
     }
     else {
         this.folder = result.folder;
+        this.prettyFolder = this.makePrettyFolder();
     }
 
 }
-

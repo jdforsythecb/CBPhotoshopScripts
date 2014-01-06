@@ -7,6 +7,7 @@ CB.isCB
 CB.isMcDaniel
 CB.isUnited
 CB.folder
+CB.prettyFolder
 CB.fontCode
 CB.isFlap
 CB.hasImage
@@ -19,6 +20,7 @@ CB.isCB = true;
 CB.isMcDaniel = false;
 CB.isUnited = false;
 CB.folder = "A0101";
+CB.prettyFolder = "A-0101";
 CB.fontCode = "A";
 CB.isFlap = false;
 CB.hasImage = true;
@@ -43,31 +45,6 @@ CB.swissKnife.convertToGrayscale();
 if (CB.hasImage) CB.swissKnife.convertToBitmapDiffusion();
 // if it is text only, do 50% threshold bitmap
 else CB.swissKnife.convertToBitmapThreshold();
-
-/*
-// copy the sanitized folder number to the clipboard (folder is passed in from previous script, PMBWMM.jsx)
-
-// include the library to copy text to the clipboard
-#include '/g/jdforsythe/Settings/Photoshop Scripts/lib/copyTextToClipboard.jsx'
-
-// we need the folder number with any letters lowercase for Font Tools
-clip = copyTextToClipboard(CB.folder.toLowerCase());
-if (clip.status == 1) {
-    alert("Failed to copy the folder number to the clipboard! Error: " + clip.message);
-}
-
-
-// open font tools
-#include "/g/jdforsythe/Settings/Photoshop Scripts/Open_Font_Tools.jsx"
-
-
-
-message = "When Font Tools opens, press \"New Font\" and CTRL+V to paste in the folder number.\n \
-           Then come back and press \"Ok\" to copy the image";
-
-CB.swissKnife.informationDialog(message);
-
-*/
 
 // create the argument object for FontTools
 FontToolsArgs = { folder: CB.folder };
