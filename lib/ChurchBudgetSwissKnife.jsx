@@ -489,7 +489,23 @@ ChurchBudgetSwissKnife.prototype.informationDialog = function(message) {
 };
 
 
-
+// function to stringify an object, since Adobe javascript doesn't include the JSON library to use JSON.stringify()
+ChurchBudgetSwissKnife.prototype.objectToString = function(obj) {
+    str = "{";
+    
+    for (var p in obj) {
+        if (obj.hasOwnProperty(p)) {
+            str += p + ":" + obj[p] + ',';
+        }
+    }
+    // after we're done making the string it will look like:
+    // key1: value1,
+    // key2: value2,
+    // key3: value3,
+    //
+    // so we need to remove the last , then add the final }
+    return str.slice(0, str.length-1) + "}";
+};
 
 
 

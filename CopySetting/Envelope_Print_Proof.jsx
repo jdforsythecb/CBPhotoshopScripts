@@ -13,14 +13,9 @@ docRef.printOneCopy();
 
 // save to pdf
 
-if (!CB.isMM) {
-    filename = docRef.layers.getByName("FONTCODE").textItem.contents + "_PROOF.pdf";
-    pdfpath = "/g/_CBProofs/";
-}
-else {
-    filename = docRef.layers.getByName("FONTCODE").textItem.contents;
-    pdfpath = "/g/Jalan/PROOFS/";
-}
+filename = docRef.layers.getByName("FILENAME").textItem.contents;
+if (!CB.isMM) pdfpath = "/g/_CBProofs/";
+else pdfpath = "/g/_MMProofs/PROOFS/";
 
 // flatten for saving pdf without layers
 CB.swissKnife.flattenImage();

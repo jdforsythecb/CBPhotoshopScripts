@@ -78,16 +78,13 @@ if( BridgeTalk.appName == "photoshop" ) {
     CB.fontCodeLayer.textItem.contents = CB.folder.toUpperCase() + " " + CB.fontCode.toUpperCase();
     
     // set the text of the filename text layer
-    CB.fileNameLayer.textItem.contents = CB.fontCodeLayer.textItem.contents + "_PROOF.PDF"
-    
-/*    
-    // if it begins with a P and the next character is not a dash, it's premier
-    // so we remove the P from the beginning for company detection
-    if (CB.folder.charAt(0).toUpperCase() === "P" && CB.folder.charAt(1) !== "-") {
-        CB.folder = CB.folder.substring(1);
-    }  
-*/    
-    
+    if (CB.jobSize == CB.JobSizes.DOLLAR) {
+        CB.fileNameLayer.textItem.contents = CB.fontCodeLayer.textItem.contents + "_PROOF.PDF";
+    }
+    else if (CB.jobSize == CB.JobSizes.PREMIER) {
+        CB.fileNameLayer.textItem.contents = CB.fontCodeLayer.textItem.contents + "_PREMIER_PROOF.PDF";
+    }
+        
     // use the company type to determine which company's info be displayed on the proof
     if (CB.isCB) CB.CB.visible = true;
     else if (CB.isMcDaniel) CB.McD.visible = true;

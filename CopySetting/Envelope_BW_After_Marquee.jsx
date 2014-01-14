@@ -11,6 +11,7 @@ CB.prettyFolder
 CB.fontCode
 CB.isFlap
 CB.hasImage
+CB.jobSize
 */
 
 /* debugging 
@@ -24,12 +25,17 @@ CB.prettyFolder = "A-0101";
 CB.fontCode = "A";
 CB.isFlap = false;
 CB.hasImage = true;
+CB.jobSize = CB.JobSizes.DOLLAR;
  */
 
-// we need a swiss knife instance
-#include "/g/jdforsythe/Settings/Photoshop Scripts/lib/ChurchBudgetSwissKnife.jsx"
-CB.swissKnife = new ChurchBudgetSwissKnife();
+// we need a swiss knife instance if it's not yet defined
+if (typeof CB.swissKnife === 'undefined') {
+    #include "/g/jdforsythe/Settings/Photoshop Scripts/lib/ChurchBudgetSwissKnife.jsx"
+    CB.swissKnife = new ChurchBudgetSwissKnife();
+}
 
+// this needs to be improved - find some way to diffusion dither where they marquee
+// then paste that back on the original and threshhold bitmap it
 if (CB.hasImage) {
     // there should be a marquee around what the user wants to protect
     // invert selection and run accented edges
@@ -47,7 +53,12 @@ if (CB.hasImage) CB.swissKnife.convertToBitmapDiffusion();
 else CB.swissKnife.convertToBitmapThreshold();
 
 // create the argument object for FontTools
-FontToolsArgs = { folder: CB.folder };
+if (CB.jobSize == CB.JobSizes.DOLLAR) {
+    FontToolsArgs = { folder: CB.folder };
+}
+else if (CB.jobSize == CB.JobSizes.PREMIER) {
+    FontToolsArgs = { folder: ("p" + CB.folder) };
+}
 
 // open font tools
 #include "/g/jdforsythe/Settings/Photoshop Scripts/Open_Font_Tools.jsx"

@@ -27,10 +27,17 @@ CB.swissKnife.flattenImage();
 CB.swissKnife.selectAll();
 CB.swissKnife.clipboardCopy();
 
-// open the dollar proof template, paste, and move into place
-if (!CB.isMM) CB.swissKnife.openProofTemplateDollar();
-else CB.swissKnife.openProofTemplateDollarMM();
+// open the dollar/premier proof template
+if (CB.jobSize == CB.JobSizes.DOLLAR) {
+    if (!CB.isMM) CB.swissKnife.openProofTemplateDollar();
+    else CB.swissKnife.openProofTemplateDollarMM();
+}
+else if (CB.jobSize == CB.JobSizes.PREMIER) {
+    if (!CB.isMM) CB.swissKnife.openProofTemplatePremier();
+    else CB.swissKnife.openProofTemplatePremierMM();
+}
 
+// paste then envelope image and move into place
 CB.swissKnife.pasteInPlace();
 CB.swissKnife.movePNGOnDollarProof();
 
@@ -42,7 +49,7 @@ CB.swissKnife.selectNone();
 
 // now run the proper proofing script for getting date/number/addressing/advertising
 if (!CB.isMM) {
-    #include "/g/jdforsythe/Settings/Photoshop Scripts/CopySetting/Dollar_Proof_CB.jsx";
+    #include "/g/jdforsythe/Settings/Photoshop Scripts/CopySetting/Envelope_Proof_CB.jsx";
 }
 
 else {
@@ -50,7 +57,7 @@ else {
 }
 
 // print proofs
-#include "/g/jdforsythe/Settings/Photoshop Scripts/CopySetting/Dollar_Print_Proof.jsx";
+#include "/g/jdforsythe/Settings/Photoshop Scripts/CopySetting/Envelope_Print_Proof.jsx";
 
 // close the proof document
 CB.swissKnife.closeWithoutSaving();
