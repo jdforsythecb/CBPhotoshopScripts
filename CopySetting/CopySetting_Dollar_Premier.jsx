@@ -24,17 +24,6 @@ CB.Programs = {
     FONTTOOLS: 5
 };
 
-// an enum-like object listing the job sizes
-CB.JobSizes = {
-    DOLLAR: 0,
-    PREMIER: 1,
-    BOOKLET: 2,
-    CARTON: 3,
-    COVER: 4,
-    MAILBACK: 5,
-    NUM10: 6
-};
-
 // an enum-like object listing the job color types
 CB.ColorTypes = {
     FULLCOLOR: 0,
@@ -200,7 +189,7 @@ function doCopySettingMonochrome() {
 
         // this dialog is to allow the user to select any images to protect from
         // the accented edges tool we're about to use, then continue execution
-/*
+
         var title = "Select image";
         var message = "Select image to protect with marquee tool, then click continue...";
         var bt = new BridgeTalk();
@@ -223,7 +212,7 @@ function doCopySettingMonochrome() {
                                 CB.isFlap = " + CB.isFlap + "; \
                                 CB.hasImage = " + CB.hasImage + "; \
                                 CB.jobSize = " + CB.jobSize + "; \
-                                #include \"/g/jdforsythe/Settings/Photoshop Scripts/Envelope_BW_After_Marquee.jsx\"; \
+                                #include \"/g/jdforsythe/Settings/Photoshop Scripts/CopySetting/Envelope_BW_After_Marquee.jsx\"; \
                             }; \
                             w.center(); \
                             w.show(); \
@@ -233,13 +222,12 @@ function doCopySettingMonochrome() {
 
             bt.body = func;
             bt.send();
+
 //                                CB.JobSizes = " + CB.swissKnife.objectToString(CB.JobSizes) + "; \
         // execution will continue after the pallete window is displayed
         // so we must do nothing here and only when the user clicks the continue button
         // in the palette window above, load another script to continue the execution of Quark BW images
-*/
 
-        alert("Remember, this functionality isn't working right now. Please do this manually.");
     }
 
 
@@ -370,8 +358,8 @@ try {
                                                                                     
                                                 CB.needProof = needsProof.value;
                                                 
-                                                if (jobSize1.value == true) CB.jobSize = CB.JobSizes.DOLLAR;
-                                                else CB.jobSize = CB.JobSizes.PREMIER;
+                                                if (jobSize1.value == true) CB.jobSize = CB.swissKnife.JobSizes.DOLLAR;
+                                                else CB.jobSize = CB.swissKnife.JobSizes.PREMIER;
                                                                                             
                                                 CB.hasImage = hasImage1.value;
                                                 
@@ -420,6 +408,7 @@ try {
 
             // Monochrome (go to PNG Font AND Font Tools)
             else if (CB.colorType == CB.ColorTypes.MONOCHROME) {
+
                 // we always want to put the image into PNG font, even for monochrome
                 // dollar and premier both use the same functions for PNG and Font Tools
                 doCopySettingColor();

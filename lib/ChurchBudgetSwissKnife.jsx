@@ -27,6 +27,19 @@ ChurchBudgetSwissKnife = function() {
 }
 
 
+
+// an enum-like object listing the job sizes
+ChurchBudgetSwissKnife.prototype.JobSizes = {
+    DOLLAR: 0,
+    PREMIER: 1,
+    BOOKLET: 2,
+    CARTON: 3,
+    COVER: 4,
+    MAILBACK: 5,
+    NUM10: 6
+};
+
+
 // a document object that always contains the ACTIVE document
 //
 // you use this just like a property that you'd store but it's a method returning the object, so, internally, e.g:
@@ -120,6 +133,134 @@ ChurchBudgetSwissKnife.prototype.invertSelection = function() {
 ChurchBudgetSwissKnife.prototype.deleteSelection = function() {
     executeAction(cTID('Dlt '), undefined, DialogModes.NO);
 };
+
+
+
+// Save current selection
+// addToSaved: whether to add selection we're saving to the already saved selection selectNum
+//              if false (default) it replaces the selection given by selectNum
+//              or if false and selectNum is not passed, it creates a new selection
+ChurchBudgetSwissKnife.prototype.saveSelection = function(addToSaved, selectNum) {
+    // defaults
+    addToSaved = typeof addToSaved !== 'undefined' ? addToSaved : false; // default to false
+    selectNum = typeof selectNum !== 'undefined' ? selectNum : null; // default to null
+
+    // we're going to store total number of saved selections - we'll name selections by an index
+    // as if they're in an array, so this stores our total number for max checking
+    if (typeof this.savedSelections === 'undefined') {
+        this.savedSelections = -1;
+    }
+    
+    // we just want to abstractly use
+    // a number in our scripts to refer to a selection, so we'll name the
+    // channel what its array index is, in string form
+    
+    if (addToSaved === true) {
+        
+        if ((selectNum === null) || isNaN(selectNum) || (selectNum >= this.savedSelections)) {
+            // error if adding and number isn't set, or number isn't a number, or number is larger than the array of selections
+        }
+    
+        else {
+            // want to add to the current selection to the saved selection
+            selType = SelectionType.EXTEND;
+        }
+    }
+
+    // replace selection
+    else {
+        if (selectNum === null) {
+            // create a new selection in storage
+            // increment the counter
+            this.savedSelections++;
+            selectNum = this.savedSelections;
+            selType = SelectionType.REPLACE;
+        }
+    
+        else if (isNaN(selectNum) || (selectNum >= this.savedSelections)) {
+            // error - if we passed nothing, we'd create a new selection above
+            // if we pass something but it's not a number, that's an error
+            // or if the number we pass is larger than the array of selections
+        }
+    
+        else {
+            // replace what we passed
+            selType = SelectionType.REPLACE;
+        }
+    }
+
+
+    // errors don't stop this from processing, although we aren't catching errors anyway so...
+    // well the if undef does...
+    
+    // now save the selection to the document's channels
+    if (typeof selType !== 'undefined') {
+        
+        // this is hacky but I don't think there's another way to do it...
+        // we have to store which channels are visible before we start
+        // since there may already be a selection channel - then we restore these to visible later
+        var visChans = [];
+        for (i=0; i<this.Document().channels.length; i++) {
+            if (this.Document().channels[i].visible === true) {
+                visChans.push(this.Document().channels[i].name);
+            }
+        }
+    
+        // and save which channels are selected for restoring later because photoshop
+        // will select the new selection channel after we create it
+        var selChans = this.Document().activeChannels;
+    
+        // create the new selection channel - setting visible to false here doesn't work?
+        var channel = this.Document().channels.add();
+        channel.name = selectNum.toString();
+        channel.kind = ChannelType.SELECTEDAREA;
+        // channel.visible = false;
+                            
+        this.Document().selection.store(channel, SelectionType.REPLACE);
+        
+        // show all the other layers that were visible before (that photoshop hides for some unknown reason)
+        for (i=0; i<visChans.length; i++) {
+            this.Document().channels.getByName(visChans[i]).visible = true;
+        }
+    
+        // make the selection layer hidden
+        this.Document().channels.getByName(selectNum.toString()).visible = false;
+        
+        // restore the originally selected channels
+        this.Document().activeChannels = selChans;
+
+    }
+
+    // and return the number of the selection we stored to the script
+    return selectNum;
+    
+};
+
+
+
+// loads a previously-saved selection by index
+// index: the index number of the selection to load
+// additive: whether to add the loaded selection to the current selection (false=replace)
+// loadInverted: whether to load the inverse of the saved selection
+ChurchBudgetSwissKnife.prototype.loadSelection = function(index, additive, loadInverted) {
+    // defaults
+    index = typeof index !== 'undefined' ? index : 0; // default to 0 - i.e. load the only selection
+    additive = typeof additive !== 'undefined' ? additive : false; // default to not additive
+    loadInverted = typeof loadInverted !== 'undefined' ? loadInverted : false; // default to not inverted
+    
+    
+    
+    if (additive === false) {
+        additive = SelectionType.REPLACE;
+    }
+    else {
+        additive = SelectionType.EXTEND;
+    }
+
+    this.Document().selection.load(this.Document().channels.getByName(index.toString()), additive, loadInverted);
+};
+        
+
 
 
 /////////////////////////////////////////////////////////////
